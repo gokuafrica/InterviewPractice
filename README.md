@@ -4,6 +4,7 @@ From 19th July Onwards, two questions would be added to the master branch every 
 Participants must solve the questions in a plain text editor and add the solutions to their own branch everyday to qualify.
 
 # Initial Setup
+1) git clone https://github.com/gokuafrica/InterviewPractice.git
 
 
 # So procedure would be:
@@ -13,3 +14,6 @@ Participants must solve the questions in a plain text editor and add the solutio
 4) git add *
 5) git commit -m "Solution for day xxx"
 6) git push origin {CustomBranchName}
+
+# Contributors
+Anwesh - Gokuafrica  
