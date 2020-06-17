@@ -1,5 +1,5 @@
 # InterviewPractice
-Process:
+Process:  
 From 19th July Onwards, two questions would be added to the master branch every single day for 106 days (Till: 2nd October 2020).
 Participants must solve the questions in a plain text editor and add the solutions to their own branch everyday to qualify.
 
