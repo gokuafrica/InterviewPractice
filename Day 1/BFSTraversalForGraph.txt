@@ -1,0 +1,60 @@
+// { Driver Code Starts
+// Initial Template for Java
+
+import java.util.*;
+import java.lang.*;
+import java.io.*;
+
+class Driverclass {
+    public static void main(String args[]) {
+        Scanner sc = new Scanner(System.in);
+        int t = sc.nextInt();
+        while (t-- > 0) {
+            ArrayList<ArrayList<Integer>> list = new ArrayList<>();
+            int nov = sc.nextInt();
+            int edg = sc.nextInt();
+
+            for (int i = 0; i < nov; i++) list.add(i, new ArrayList<Integer>());
+
+            for (int i = 1; i <= edg; i++) {
+                int u = sc.nextInt();
+                int v = sc.nextInt();
+                list.get(u).add(v);
+            }
+            ArrayList<Integer>res = new Traversal().bfs(list,nov);
+            for (int i =0 ;i < res.size (); i++) 
+                System.out.print (res.get (i) + " ");
+            System.out.println();
+        }
+    }
+}
+// } Driver Code Ends
+
+
+// User function Template for Java
+
+/*
+*  g[]: adj list of the graph
+*  N : number of vertices
+*/
+class Traversal {
+    static ArrayList<Integer> bfs(ArrayList<ArrayList<Integer>> g, int N) {
+        ArrayList<Integer> traversalArray = new ArrayList<>(N);
+        boolean[] visitedArr = new boolean[N];
+        Queue<Integer> bfsQ = new LinkedList<>();
+        bfsQ.add(0);
+        while(bfsQ.peek() != null){
+            Integer element = bfsQ.remove();
+            if(!visitedArr[element]){
+                traversalArray.add(element);
+                visitedArr[element] = true;
+                if(g.get(element) != null && g.get(element).size() > 0){
+                    for(int index = 0; index < g.get(element).size(); index++){
+                        bfsQ.add(g.get(element).get(index));
+                    }
+                }
+            }
+        }
+        return traversalArray;
+    }
+}
