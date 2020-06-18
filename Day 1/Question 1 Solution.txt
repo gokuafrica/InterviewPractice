@@ -1,0 +1,22 @@
+class Traversal
+{
+    static ArrayList<Integer> dfs(ArrayList<ArrayList<Integer>> g, int N)
+    {
+        ArrayList<Integer> resultSet = new ArrayList<>(N);
+        HashSet<Integer> visited = new HashSet<>(N);
+        Stack<Integer> s = new Stack<>();
+        s.add(0);
+        while(!s.isEmpty()){
+            int visitedNode = s.pop();
+            if(visited.contains(visitedNode)){
+                continue;
+            }
+            resultSet.add(visitedNode);
+            visited.add(visitedNode);
+            ArrayList<Integer> neighbours = g.get(visitedNode);
+            Collections.sort(neighbours,Collections.reverseOrder());
+            s.addAll(neighbours);
+        }
+        return resultSet;
+    }
+}
