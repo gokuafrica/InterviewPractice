@@ -22,3 +22,5 @@ Participants must solve the questions in a plain text editor and add the solutio
 
 # Contributors
 Anwesh - Gokuafrica  
+Sagar - ShubhamSagarGithub  
+Shivam - shivamearth
