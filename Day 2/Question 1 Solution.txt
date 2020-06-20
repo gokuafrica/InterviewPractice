@@ -1,0 +1,36 @@
+class DetectCycle
+{
+ static boolean isCyclic(ArrayList<ArrayList<Integer>> adj, int V)
+ {
+     HashSet<Integer> visited;
+     HashSet<Integer> notVisited = new HashSet<>(adj.size());
+     HashMap<Integer,Integer> parent = new HashMap<>(adj.size());
+     Stack<Integer> s = new Stack<>();
+     for(int i=0;i<adj.size();++i){
+         notVisited.add(i);
+     }
+     while(!notVisited.isEmpty()){
+         Iterator<Integer> i = notVisited.iterator();
+         s.push(i.next());
+         visited = new HashSet<>(adj.size());
+         while(!s.isEmpty()){
+             int ele = s.pop();
+             if(visited.contains(ele))
+                return true;
+             visited.add(ele);
+             notVisited.remove(ele);
+             List<Integer> neighbours = adj.get(ele);
+             int par = -1;
+             if(parent.containsKey(ele))
+                par = parent.get(ele);
+             for(int neighbour: neighbours){
+                 if(neighbour!=par){
+                     s.push(neighbour);
+                     parent.put(neighbour,ele);
+                 }
+             }
+         }
+     }
+     return false;
+ }
+}
