@@ -1,0 +1,117 @@
+class Islands {
+    
+    static int M;
+    static ArrayList<ArrayList<Integer>> A;
+    static ArrayList<ArrayList<Integer>> list;
+    static HashMap<Coordinates,Integer> map;
+    
+    static class Coordinates{
+        int i,j;
+        Coordinates(int i,int j){
+            this.i = i;
+            this.j = j;
+        }
+        public boolean equals(Object obj){
+            Coordinates c = (Coordinates) obj;
+            if(this.i==c.i && this.j==c.j)
+                return true;
+            else
+                return false;
+        }
+        public int hashCode(){
+            return i*Islands.M+j;
+        }
+    }
+    
+    static void processPiece(int a, int b, Coordinates index){
+        Coordinates position = new Coordinates(a,b);
+        if(Islands.map.containsKey(position)){
+            list.get(Islands.map.get(index)).add(Islands.map.get(position));
+        }
+    }
+    
+    // Function to find the number of island in the given list A
+    // N, M: size of list row and column respectively
+    static int findIslands(ArrayList<ArrayList<Integer>> A, int N, int M) {
+        Islands.M = M;
+        Islands.A = A;
+        int count = 0;
+        Islands.map = new HashMap<>(N*M);
+        for(int i=0;i<N;++i){
+            for(int j=0;j<M;++j){
+                if(A.get(i).get(j).equals(1)){
+                    Coordinates c = new Coordinates(i,j);
+                    map.put(c,count);
+                    ++count;
+                }
+            }
+        }
+        Islands.list = new ArrayList<>(count);
+        
+        for(int i=0;i<count;++i){
+            Islands.list.add(new ArrayList<Integer>(8));
+        }
+        
+        Iterator<Coordinates> i = Islands.map.keySet().iterator();
+        
+        while(i.hasNext()){
+            Coordinates ele = i.next();
+            
+            int a = ele.i-1;
+            int b = ele.j-1;
+            Islands.processPiece(a,b,ele);
+            
+            ++b;
+            Islands.processPiece(a,b,ele);
+            
+            ++b;
+            Islands.processPiece(a,b,ele);
+            
+            a = ele.i;
+            b = ele.j-1;
+            Islands.processPiece(a,b,ele);
+            
+            b += 2;
+            Islands.processPiece(a,b,ele);
+            
+            a = ele.i+1;
+            b = ele.j-1;
+            Islands.processPiece(a,b,ele);
+            
+            ++b;
+            Islands.processPiece(a,b,ele);
+            
+            ++b;
+            Islands.processPiece(a,b,ele);
+        }
+        
+        HashSet<Integer> notVisited = new HashSet<>(Islands.list.size());
+        HashSet<Integer> visited = new HashSet<>(Islands.list.size());
+        
+        for(int k=0;k<Islands.list.size();++k){
+            notVisited.add(k);
+        }
+        
+        count = 0;
+        
+        while(!notVisited.isEmpty()){
+            Iterator<Integer> j = notVisited.iterator();
+            Integer ele = j.next();
+            ++count;
+            Stack<Integer> s = new Stack<>();
+            s.push(ele);
+            while(!s.isEmpty()){
+                Integer current = s.pop();
+                visited.add(current);
+                notVisited.remove(current);
+                ArrayList<Integer> neighbours = Islands.list.get(current);
+                for(Integer neighbour: neighbours){
+                    if(!visited.contains(neighbour))
+                        s.add(neighbour);
+                }
+            }
+        }
+        
+        return count;
+    }
+}

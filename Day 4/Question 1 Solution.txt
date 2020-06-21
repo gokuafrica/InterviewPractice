@@ -1,0 +1,32 @@
+class TopologicalSort {
+    static int[] topoSort(ArrayList<ArrayList<Integer>> adj, int V) {
+        ArrayList<Integer> indegree = new ArrayList<>(V);
+        int[] result = new int[V];
+        for(int i=0;i<V;++i){
+            indegree.add(0);
+        }
+        for(ArrayList<Integer> list: adj){
+            for(Integer ele: list){
+                indegree.set(ele,indegree.get(ele)+1);
+            }
+        }
+        Queue<Integer> q = new LinkedList<Integer>();
+        for(int i=0;i<indegree.size();++i){
+            if(indegree.get(i).equals(0))
+                q.add(i);
+        }
+        int counter = 0;
+        while(!q.isEmpty()){
+            int ele = q.poll();
+            result[counter] = ele;
+            ArrayList<Integer> neighbours = adj.get(ele);
+            for(Integer neighbour: neighbours){
+                indegree.set(neighbour,indegree.get(neighbour)-1);
+                if(indegree.get(neighbour).equals(0))
+                    q.add(neighbour);
+            }
+            ++counter;
+        }
+        return result;
+    }
+}
