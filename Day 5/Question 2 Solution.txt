@@ -1,0 +1,32 @@
+class GfG {
+    // return the minimum number of swaps required to sort the arra
+	public int minSwaps(int[] arr, int N) {
+	    ArrayList<Integer> ar = new ArrayList<Integer>(N);
+	    HashSet<Integer> notVisited = new HashSet<>(N);
+	    for(int i: arr){
+	        ar.add(i);
+	    }
+	    Collections.sort(ar);
+	    HashMap<Integer,Integer> map = new HashMap<>(ar.size());
+	    for(int i=0;i<ar.size();++i){
+	        map.put(ar.get(i),i);
+	        notVisited.add(i);
+	    }
+	    int count = 0;
+	    while(!notVisited.isEmpty()){
+	        Iterator<Integer> i = notVisited.iterator();
+	        Integer ele = i.next();
+	        HashSet<Integer> visited = new HashSet<>(N);
+	        while(true){
+	            if(visited.contains(ele))
+	                break;
+	            notVisited.remove(ele);
+	            visited.add(ele);
+	            ++count;
+	            ele = map.get(arr[ele]);
+	        }
+	        --count;
+	    }
+	    return count;
+	}
+}
