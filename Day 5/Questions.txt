@@ -3,3 +3,75 @@ https://practice.geeksforgeeks.org/problems/implementing-dijkstra-set-1-adjacenc
 
 Question 2:
 https://practice.geeksforgeeks.org/problems/minimum-swaps/1
+
+
+
+package coding;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+
+public class Dijikstras {
+	public static int[] dijkstra(ArrayList<ArrayList<Integer>> list, int src, int V)
+    {
+        int[] dist = new int[V];
+        for(int i=0; i<V; i++)
+            dist[i] = Integer.MAX_VALUE;
+            
+        dist[src] = 0;
+        boolean[] spt = new boolean[V];
+        Arrays.fill(spt, false);
+        for(int i=0; i<V; i++){
+            int u = getMinVertex(dist, spt);
+            spt[u] = true;
+            for(int v = 0; v<V; v++){
+                if(list.get(u).get(v) !=0 && !spt[v] && dist[u]!=Integer.MAX_VALUE){
+                    int newD = dist[u] + list.get(u).get(v);
+                    if(dist[v] > newD)
+                        dist[v] = newD;
+                }
+            }
+        }
+        return dist;
+    }
+    
+    private static int getMinVertex(int[] dist, boolean[] spt){
+        int min = Integer.MAX_VALUE, v = -1;
+        for(int i=0; i<dist.length; i++){
+            if(min > dist[i] && !spt[i]){
+                min = dist[i];
+                v = i;
+            }
+        }
+        return v;
+    }
+    
+}
+
+
+
+
+public static int minSwaps(int[] A, int N)
+		{
+		    int minIndex,temp,i,j;
+	    int count = 0;
+	    for( i=0;i<N-1;i++)
+	    {
+	        minIndex = i;
+	        for( j=i+1;j<N;j++)
+	        {
+	            if(A[j]<A[minIndex])
+	            {
+	                minIndex = j;
+	            }
+	        }
+	        if(i!=minIndex)
+	        {
+	            temp = A[i];
+	            A[i] = A[minIndex];
+	            A[minIndex] = temp;
+	            count++;
+	        }
+	    }
+	    return count;
+		}
