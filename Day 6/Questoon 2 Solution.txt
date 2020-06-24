@@ -1,0 +1,146 @@
+/*package whatever //do not write package name here */
+
+import java.util.*;
+import java.lang.*;
+import java.io.*;
+
+class GFG {
+	public static void main (String[] args) {
+		Scanner sc = new Scanner(System.in);
+		int t = Integer.parseInt(sc.nextLine());
+		StringBuffer sb = new StringBuffer();
+		while(t-->0){
+		    String[] input1 = sc.nextLine().split(" ");
+		    int m = Integer.parseInt(input1[0]);
+		    int n = Integer.parseInt(input1[1]);
+		    String[] input2 = sc.nextLine().split(" ");
+		    ArrayList<ArrayList<Integer>> matrix = new ArrayList<>(m);
+		    for(int i=0;i<m;++i){
+		        matrix.add(new ArrayList<>(n));
+		        for(int j=0;j<n;++j){
+		            matrix.get(i).add(Integer.parseInt(input2[i*n+j]));
+		        }
+		    }
+		    String[] input3 = sc.nextLine().split(" ");
+		    int x = Integer.parseInt(input3[0]);
+		    int y = Integer.parseInt(input3[1]);
+		    GFG g = new GFG(m,n);
+		    sb.append(g.shortestPath(matrix,x,y)+"\n");
+		}
+		sc.close();
+		System.out.println(sb.toString());
+	}
+	
+	int m,n;
+	
+    GFG(int m,int n){
+        this.m = m;
+        this.n = n;
+    }
+    class Coordinate{
+        int x,y;
+        Coordinate(int x,int y){
+            this.x = x;
+            this.y = y;
+        }
+        public int hashCode(){
+            return x*n+y;
+        }
+        public boolean equals(Object obj){
+            Coordinate c = (Coordinate) obj;
+            if(c.x==this.x && this.y==c.y)
+                return true;
+            else
+                return false;
+        }
+        public String toString(){
+            return "x:"+x+" y:"+y;
+        }
+    }
+	
+	public int shortestPath(ArrayList<ArrayList<Integer>> matrix, int x, int y){
+        Coordinate end = new Coordinate(x,y);
+        Coordinate start = new Coordinate(0,0);
+        HashSet<Coordinate> sparse = new HashSet<>(m*n);
+        for(int i = 0;i<m;++i){
+            for(int j = 0;j<n;++j){
+                if(matrix.get(i).get(j).equals(1)){
+                    Coordinate c = new Coordinate(i,j);
+                    sparse.add(c);
+                }
+            }
+        }
+        if(!sparse.contains(start) || !sparse.contains(end))
+            return -1;
+        ArrayList<ArrayList<Coordinate>> graph = new ArrayList<>(sparse.size());
+        Iterator<Coordinate> i = sparse.iterator();
+        HashMap<Coordinate,Integer> indexed = new HashMap<>(sparse.size());
+        while(i.hasNext()){
+            Coordinate current = i.next();
+            indexed.put(current,graph.size());
+            ArrayList<Coordinate> neighbours = new ArrayList<>(sparse.size());
+            Coordinate test = new Coordinate(current.x-1,current.y);
+            if(sparse.contains(test)){
+                neighbours.add(test);
+            }
+            test = new Coordinate(current.x,current.y-1);
+            if(sparse.contains(test)){
+                neighbours.add(test);
+            }
+            test = new Coordinate(current.x,current.y+1);
+            if(sparse.contains(test)){
+                neighbours.add(test);
+            }
+            test = new Coordinate(current.x+1,current.y);
+            if(sparse.contains(test)){
+                neighbours.add(test);
+            }
+            graph.add(neighbours);
+        }
+        ArrayList<Integer> distance = new ArrayList<Integer>(graph.size());
+        for(int k=0;k<graph.size();++k){
+            distance.add(Integer.MAX_VALUE);
+        }
+        distance.set(0,0);
+        int cur = 0;
+        HashSet<Integer> visited = new HashSet<>(graph.size());
+        // for(int k = 0;k<graph.size();++k){
+        //     ArrayList<Coordinate> neighbours = graph.get(k);
+        //     System.out.print(k+"->");
+        //     for(Coordinate neighbour: neighbours){
+        //         System.out.print(indexed.get(neighbour)+",");
+        //     }
+        //     System.out.print("\n");
+        // }
+        while(true){
+            int min = Integer.MAX_VALUE;
+            int index = -1;
+            for(int k=0;k<graph.size();++k){
+                if(visited.contains(k))
+                    continue;
+                if(!distance.get(k).equals(Integer.MAX_VALUE) && min>distance.get(k)+distance.get(cur)){
+                    min = distance.get(k)+cur;
+                    index = k;
+                }
+            }
+            //System.out.println("Index:"+index);
+            if(index==-1)
+                break;
+            cur = index;
+            visited.add(index);
+            ArrayList<Coordinate> neighbours = graph.get(index);
+            for(Coordinate neighbour: neighbours){
+                if(!visited.contains(indexed.get(neighbour)) && distance.get(indexed.get(neighbour))>(1+distance.get(cur))){
+                    //System.out.println("Updating "+indexed.get(neighbour)+" to: "+new Integer(1+distance.get(cur))+" cur:"+cur);
+                    distance.set(indexed.get(neighbour),1+distance.get(cur));
+                }
+            }
+        }
+        int result = distance.get(indexed.get(end));
+        //System.out.println(distance);
+        if(result==Integer.MAX_VALUE)
+            return -1;
+        else
+            return result;
+    }
+}

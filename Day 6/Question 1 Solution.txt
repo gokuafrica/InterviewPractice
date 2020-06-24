@@ -1,0 +1,116 @@
+// { Driver Code Starts
+//Initial Template for Java
+package Graphs;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Scanner;
+import java.util.Stack;
+
+class StronglyConnectedComponents
+{
+    public static void main (String[] args)
+    {
+        Scanner sc = new Scanner(System.in);
+        int t = sc.nextInt();
+        
+        while(t-- > 0)
+        {
+            // arraylist of arraylist to represent graph
+            ArrayList<ArrayList<Integer>> list = new ArrayList<>();
+            
+            int vertices = Integer.parseInt(sc.next());
+            int edges = Integer.parseInt(sc.next());
+            
+            for(int i =0; i < vertices; i++)
+                list.add(i, new ArrayList<Integer>());
+                
+            for(int i = 1; i <= edges; i++)
+            {    int u = Integer.parseInt(sc.next());
+                 int v = Integer.parseInt(sc.next());
+                 
+                 // adding directed edgese between 
+                 // vertex 'u' and 'v'
+                 list.get(u).add(v);
+            }
+            
+            Solution T = new Solution();
+            System.out.println(T.kosaraju(list, vertices));
+		}
+        sc.close();
+    }
+}
+// } Driver Code Ends
+
+
+//User function Template for Java
+
+// adj : Adjacency list representing the graph
+// N: No of vertices
+
+
+class Solution
+{
+    HashSet<Integer> visited, notVisited,visited1;
+    ArrayList<ArrayList<Integer>> adj, adjInverse, stronglyConnected;
+    Stack<Integer> s;
+    public void recur(Integer root){
+        visited.add(root);
+        notVisited.remove(root);
+        ArrayList<Integer> neighbours = adj.get(root);
+        for(Integer neighbour:neighbours){
+            if(!visited.contains(neighbour))
+                recur(neighbour);
+        }
+        s.push(root);
+    }
+    
+    public int kosaraju(ArrayList<ArrayList<Integer>> adj, int N)
+    {
+        ArrayList<ArrayList<Integer>> adjInverse = new ArrayList<>(N);
+        this.notVisited = new HashSet<>(N);
+        this.visited = new HashSet<>(N);
+        this.visited1 = new HashSet<>(N);
+        this.stronglyConnected = new ArrayList<>(N);
+        for(int i=0;i<N;++i){
+            notVisited.add(i);
+            adjInverse.add(new ArrayList<>(N));
+        }
+        for(int i=0;i<N;++i){
+            for(int j=0;j<adj.get(i).size();++j){
+                int left = i;
+                int right = adj.get(i).get(j);
+                adjInverse.get(right).add(left);
+            }
+        }
+        this.adj = adj;
+        this.adjInverse = adjInverse;
+        this.s = new Stack<>();
+        while(!notVisited.isEmpty()){
+            Iterator<Integer> i = notVisited.iterator();
+            recur(i.next());
+        }
+        while(!s.isEmpty()){
+            int el = s.pop();
+            if(visited1.contains(el))
+                continue;
+            stronglyConnected.add(new ArrayList<>(N));
+            Stack<Integer> s1 = new Stack<Integer>();
+            s1.add(el);
+            while(!s1.isEmpty()){
+                int ele = s1.pop();
+                if(visited1.contains(ele))
+                    continue;
+                visited1.add(ele);
+                stronglyConnected.get(stronglyConnected.size()-1).add(ele);
+                ArrayList<Integer> neighbours = adjInverse.get(ele);
+                for(Integer neighbour:neighbours){
+                    if(!visited1.contains(neighbour)){
+                        s1.push(neighbour);
+                    }
+                }
+            }
+        }
+        return stronglyConnected.size();
+    }
+}
