@@ -1,0 +1,123 @@
+/*package whatever //do not write package name here */
+
+import java.util.*;
+import java.lang.*;
+import java.io.*;
+
+class GFG {
+    class Coordinate{
+        int x,y;
+        Coordinate(int x,int y){
+            this.x = x;
+            this.y = y;
+        }
+        public int hashCode(){
+            return x*n+y;
+        }
+        public boolean equals(Object obj){
+            Coordinate c = (Coordinate) obj;
+            if(c.x==this.x && this.y==c.y)
+                return true;
+            else
+                return false;
+        }
+        public String toString(){
+            return "x:"+x+" y:"+y;
+        }
+    }
+    
+	public static void main (String[] args) {
+		Scanner sc = new Scanner(System.in);
+		int t = Integer.parseInt(sc.nextLine());
+		StringBuffer sb = new StringBuffer();
+		while(t-->0){
+		    int n = Integer.parseInt(sc.nextLine());
+		    String[] input2 = sc.nextLine().split(" ");
+		    ArrayList<ArrayList<Integer>> matrix = new ArrayList<>(n);
+		    for(int i=0;i<n;++i){
+		        matrix.add(new ArrayList<>(n));
+		        for(int j=0;j<n;++j){
+		            matrix.get(i).add(Integer.parseInt(input2[i*n+j]));
+		        }
+		    }
+		    GFG g = new GFG(n,n);
+		    sb.append(g.shortestPath(matrix)+"\n");
+		}
+		sc.close();
+		System.out.println(sb.toString());
+	}
+	
+	int m,n;
+	
+    GFG(int m,int n){
+        this.m = m;
+        this.n = n;
+    }
+	
+	public int shortestPath(ArrayList<ArrayList<Integer>> matrix){
+        Coordinate end = new Coordinate(-1,-1);
+        Coordinate start = new Coordinate(-1,-1);
+        HashSet<Coordinate> sparse = new HashSet<>(m*n);
+        for(int i = 0;i<m;++i){
+            for(int j = 0;j<n;++j){
+                if(matrix.get(i).get(j).equals(3)){
+                    Coordinate c = new Coordinate(i,j);
+                    sparse.add(c);
+                }
+                else if(matrix.get(i).get(j).equals(1)){
+                    start = new Coordinate(i,j);
+                    sparse.add(start);
+                }
+                else if(matrix.get(i).get(j).equals(2)){
+                    end = new Coordinate(i,j);
+                    sparse.add(end);
+                }
+            }
+        }
+        if(!sparse.contains(start) || !sparse.contains(end))
+            return 0;
+        ArrayList<ArrayList<Coordinate>> graph = new ArrayList<>(sparse.size());
+        Iterator<Coordinate> i = sparse.iterator();
+        HashMap<Coordinate,Integer> indexed = new HashMap<>(sparse.size());
+        while(i.hasNext()){
+            Coordinate current = i.next();
+            indexed.put(current,graph.size());
+            ArrayList<Coordinate> neighbours = new ArrayList<>(sparse.size());
+            Coordinate test = new Coordinate(current.x-1,current.y);
+            if(sparse.contains(test)){
+                neighbours.add(test);
+            }
+            test = new Coordinate(current.x,current.y-1);
+            if(sparse.contains(test)){
+                neighbours.add(test);
+            }
+            test = new Coordinate(current.x,current.y+1);
+            if(sparse.contains(test)){
+                neighbours.add(test);
+            }
+            test = new Coordinate(current.x+1,current.y);
+            if(sparse.contains(test)){
+                neighbours.add(test);
+            }
+            graph.add(neighbours);
+        }
+        
+        Stack<Coordinate> s = new Stack<>();
+        s.addAll(graph.get(indexed.get(start)));
+        HashSet<Coordinate> visited = new HashSet<>(graph.size());
+        while(!s.isEmpty()){
+            Coordinate ele = s.pop();
+            if(visited.contains(ele))
+                continue;
+            if(ele.equals(end))
+                return 1;
+            visited.add(ele);
+            for(Coordinate neighbou: graph.get(indexed.get(ele))){
+                if(!visited.contains(neighbou))
+                    s.push(neighbou);
+            }
+            
+        }
+        return 0;
+    }
+}

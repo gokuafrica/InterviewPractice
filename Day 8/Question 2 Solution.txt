@@ -1,0 +1,83 @@
+/*package whatever //do not write package name here */
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Scanner;
+
+class GFG {
+	public static void main (String[] args) {
+		Scanner sc = new Scanner(System.in);
+		int t = Integer.parseInt(sc.nextLine());
+		StringBuffer sb = new StringBuffer();
+		while(t-->0){
+		    int n = Integer.parseInt(sc.nextLine());
+		    int m = n;
+		    String[] input2 = sc.nextLine().split(" ");
+		    ArrayList<ArrayList<Integer>> matrix = new ArrayList<>(m);
+		    for(int i=0;i<m;++i){
+		        matrix.add(new ArrayList<>(n));
+		        for(int j=0;j<n;++j){
+		            matrix.get(i).add(Integer.parseInt(input2[i*n+j]));
+		        }
+		    }
+		    GFG g = new GFG(m,n);
+		    sb.append(g.shortestPath(matrix)+"\n");
+		}
+		sc.close();
+		System.out.println(sb.toString());
+	}
+	
+	int m,n;
+	
+    GFG(int m,int n){
+        this.m = m;
+        this.n = n;
+    }
+    class Coordinate{
+        int x,y;
+        Coordinate(int x,int y){
+            this.x = x;
+            this.y = y;
+        }
+        public int hashCode(){
+            return x*n+y;
+        }
+        public boolean equals(Object obj){
+            Coordinate c = (Coordinate) obj;
+            if(c.x==this.x && this.y==c.y)
+                return true;
+            else
+                return false;
+        }
+        public String toString(){
+            return "x:"+x+" y:"+y;
+        }
+    }
+	
+	public int[] x = {-1,0,0,1};
+	public int[] y = {0,-1,1,0};
+	
+	public int shortestPath(ArrayList<ArrayList<Integer>> matrix){
+        Coordinate start = new Coordinate(0,0);
+        Queue<Coordinate> q = new LinkedList<>();
+        ArrayList<Integer> distances = new ArrayList<>(Collections.nCopies(n*n, Integer.MAX_VALUE));
+        distances.set(0,matrix.get(0).get(0));
+        q.add(start);
+        while(!q.isEmpty()){
+            Coordinate ele = q.poll();
+            int weight = distances.get(ele.x*n+ele.y);
+            
+            for(int i=0;i<4;++i){
+                int a = ele.x+x[i];
+                int b = ele.y+y[i];
+                if(a>=0 && a<n && b>=0 && b<n && distances.get(a*n+b)>weight+matrix.get(a).get(b)){
+                    distances.set(a*n+b,weight+matrix.get(a).get(b));
+                    q.add(new Coordinate(a,b));
+                }
+            }
+        }
+        return distances.get(distances.size()-1);
+    }
+}
