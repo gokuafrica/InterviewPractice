@@ -3,3 +3,102 @@ https://practice.geeksforgeeks.org/problems/topological-sort/1
 
 Question 2:
 https://practice.geeksforgeeks.org/problems/find-the-number-of-islands/1
+
+
+
+// { Driver Code Starts
+import java.util.*;
+import java.io.*;
+import java.lang.*;
+
+class Main {
+    public static void main(String[] args) throws IOException {
+        BufferedReader read =
+            new BufferedReader(new InputStreamReader(System.in));
+        int t = Integer.parseInt(read.readLine());
+
+        while (t-- > 0) {
+            ArrayList<ArrayList<Integer>> list = new ArrayList<>();
+            String st[] = read.readLine().trim().split("\\s+");
+            int edg = Integer.parseInt(st[0]);
+            int nov = Integer.parseInt(st[1]);
+
+            for (int i = 0; i < nov + 1; i++)
+                list.add(i, new ArrayList<Integer>());
+
+            String s[] = read.readLine().trim().split("\\s+");
+            int p = 0;
+            for (int i = 1; i <= edg; i++) {
+                int u = Integer.parseInt(s[p++]);
+                int v = Integer.parseInt(s[p++]);
+                list.get(u).add(v);
+            }
+
+            int[] res = new TopologicalSort().topoSort(list, nov);
+
+            if (check(list, nov, res) == true)
+                System.out.println("1");
+            else
+                System.out.println("0");
+        }
+    }
+    static boolean check(ArrayList<ArrayList<Integer>> list, int V, int[] res) {
+        int[] map = new int[V];
+        for (int i = 0; i < V; i++) {
+            map[res[i]] = i;
+        }
+        for (int i = 0; i < V; i++) {
+            for (int v : list.get(i)) {
+                if (map[i] > map[v]) return false;
+            }
+        }
+        return true;
+    }
+}
+// } Driver Code Ends
+
+
+/*Complete the function below*/
+
+/*
+ArrayList<ArrayList<>Integer>adj: to represent graph containing 'N' vertices
+                                    and edges between them
+N: represent number of vertices
+*/
+class TopologicalSort {
+    static int[] topoSort(ArrayList<ArrayList<Integer>> adj, int N) {
+		int[] res = new int[N];
+		int count = 0;
+		Map<Integer, Integer> indegree = new HashMap<>(N);
+		for (int i = 0; i < N; i++) {
+		    indegree.put(i,0);
+		}
+		for (int i = 0; i < N; i++) {
+			ArrayList<Integer> neighbours = adj.get(i);
+			for(Integer neighbour: neighbours){
+			    indegree.put(neighbour,indegree.get(neighbour)+1);
+			}
+		}
+		Stack< Integer> valueStack = new Stack<>();
+		Iterator<Integer> i = indegree.keySet().iterator();
+	    while(i.hasNext()){
+            Integer ele = i.next();
+            if(indegree.get(ele).equals(0)){
+                valueStack.push(ele);
+            }
+		}
+	    while(!valueStack.isEmpty()){
+	        Integer ele1 = valueStack.pop();
+	        res[count++] = ele1;
+	        ArrayList<Integer> neighbours = adj.get(ele1);
+	        for(Integer neighbour: neighbours){
+	                int val = indegree.get(neighbour)-1;
+	                indegree.put(neighbour,val);
+	                if(val==0)
+	                    valueStack.push(neighbour);
+	        }
+	    }
+		return res;
+	}
+}
+`
