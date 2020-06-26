@@ -1,0 +1,119 @@
+/*package whatever //do not write package name here */
+
+import java.util.*;
+import java.lang.*;
+import java.io.*;
+
+class Solution
+{
+    HashSet<Integer> visited, notVisited,visited1;
+    ArrayList<ArrayList<Integer>> adj, adjInverse, stronglyConnected;
+    Stack<Integer> s;
+    public void recur(Integer root){
+        visited.add(root);
+        notVisited.remove(root);
+        ArrayList<Integer> neighbours = adj.get(root);
+        for(Integer neighbour:neighbours){
+            if(!visited.contains(neighbour))
+                recur(neighbour);
+        }
+        s.push(root);
+    }
+    
+    public int kosaraju(ArrayList<ArrayList<Integer>> adj, int N)
+    {
+        ArrayList<ArrayList<Integer>> adjInverse = new ArrayList<>(N);
+        this.notVisited = new HashSet<>(N);
+        this.visited = new HashSet<>(N);
+        this.visited1 = new HashSet<>(N);
+        this.stronglyConnected = new ArrayList<>(N);
+        for(int i=0;i<N;++i){
+            notVisited.add(i);
+            adjInverse.add(new ArrayList<>(N));
+        }
+        for(int i=0;i<N;++i){
+            for(int j=0;j<adj.get(i).size();++j){
+                int left = i;
+                int right = adj.get(i).get(j);
+                adjInverse.get(right).add(left);
+            }
+        }
+        this.adj = adj;
+        this.adjInverse = adjInverse;
+        this.s = new Stack<>();
+        while(!notVisited.isEmpty()){
+            Iterator<Integer> i = notVisited.iterator();
+            recur(i.next());
+        }
+        while(!s.isEmpty()){
+            int el = s.pop();
+            if(visited1.contains(el))
+                continue;
+            stronglyConnected.add(new ArrayList<>(N));
+            Stack<Integer> s1 = new Stack<Integer>();
+            s1.add(el);
+            while(!s1.isEmpty()){
+                int ele = s1.pop();
+                if(visited1.contains(ele))
+                    continue;
+                visited1.add(ele);
+                stronglyConnected.get(stronglyConnected.size()-1).add(ele);
+                ArrayList<Integer> neighbours = adjInverse.get(ele);
+                for(Integer neighbour:neighbours){
+                    if(!visited1.contains(neighbour)){
+                        s1.push(neighbour);
+                    }
+                }
+            }
+        }
+        return stronglyConnected.size();
+    }
+}
+
+
+class GFG {
+    
+	public static void main (String[] args) {
+		Scanner sc = new Scanner(System.in);
+		StringBuffer sb = new StringBuffer();
+		int t = Integer.parseInt(sc.nextLine());
+		while(t-->0){
+		    int n = Integer.parseInt(sc.nextLine());
+		    String[] input = sc.nextLine().split(" ");
+		    if(input.length==1){
+		        String word = input[0];
+		        if(word.substring(0,1).equals(word.substring(word.length()-1,word.length())))
+		            sb.append("1\n");
+		        else
+		            sb.append("0\n");
+		    }
+		    else{
+    		    HashMap<String,Stack<Integer>> indexed = new HashMap<>(n);
+    		    int counter = 0;
+    		    for(String word: input){
+    		        if(!indexed.containsKey(word))
+    		            indexed.put(word,new Stack<>());
+    		        indexed.get(word).push(counter++);
+    		    }
+    		    HashMap<String,ArrayList<Integer>> map = new HashMap<>(26);
+    		    List<String> visited = new LinkedList<>();
+    		    for(String word: input){
+    		        if(!map.containsKey(word.substring(0,1))){
+    		            map.put(word.substring(0,1),new ArrayList<>(n));
+    		        }
+    		        map.get(word.substring(0,1)).add(indexed.get(word).pop());
+    		    }
+    		    ArrayList<ArrayList<Integer>> graph = new ArrayList<>(n);
+    		    for(String word: input){
+    		        graph.add(Optional.ofNullable(map.get(word.substring(word.length()-1,word.length()))).orElseGet(()->new ArrayList<>(1)));
+    		    }
+    		    if((new Solution()).kosaraju(graph,n)==1)
+    		        sb.append("1\n");
+    		    else
+    		        sb.append("0\n");
+		    }
+		}
+		sc.close();
+		System.out.println(sb);
+	}
+}

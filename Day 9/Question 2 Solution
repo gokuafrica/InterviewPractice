@@ -1,0 +1,38 @@
+/*package whatever //do not write package name here */
+
+import java.util.*;
+import java.lang.*;
+import java.io.*;
+
+class GFG {
+	public static void main (String[] args) {
+		Scanner sc = new Scanner(System.in);
+		StringBuffer sb = new StringBuffer();
+		int t = sc.nextInt();
+		while(t-->0){
+		    int n = sc.nextInt();
+		    int[][] adj = new int[n][n];
+		    for(int i=0;i<n;++i)
+		        for(int j=0;j<n;++j)
+		            adj[i][j] = sc.nextInt();
+		    for(int k=0;k<n;++k){
+		        for(int i=0;i<n;++i){
+		            for(int j=0;j<n;++j){
+		                    adj[i][j] = Math.min(adj[i][j],adj[i][k]+adj[k][j]);
+		            }
+		        }
+		    }
+		    for(int i=0;i<n;++i){
+	            for(int j=0;j<n;++j){
+	                if(adj[i][j]==10000000)
+	                    sb.append("INF"+" ");
+	                else
+	                    sb.append(adj[i][j]+" ");
+	            }
+	            sb.append("\n");
+	        }
+        }
+        sc.close();
+		System.out.println(sb);
+	}
+}
