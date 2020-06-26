@@ -1,0 +1,5 @@
+Question 1:
+https://practice.geeksforgeeks.org/problems/alien-dictionary/1
+
+Question 2:
+https://practice.geeksforgeeks.org/problems/snake-and-ladder-problem/0
