@@ -1,0 +1,162 @@
+// { Driver Code Starts
+/*package whatever //do not write package name here */
+
+import java.io.*;
+import java.util.*;
+import java.math.*;
+
+class GFG {
+	public static void main (String[] args) {
+		Scanner sc = new Scanner(System.in);
+		
+		int t = Integer.parseInt(sc.next());
+		while(t-- > 0)
+		{
+		    int n = Integer.parseInt(sc.next());
+		    int k = Integer.parseInt(sc.next());
+		    
+		    String[] words = new String[n];
+		    
+		    for(int i=0;i<n;i++)
+		    {
+		        words[i] = sc.next();
+		    }
+		    
+		    Solution T = new Solution();
+		  //  System.out.println(T.findOrder(words,k));
+		    String order = T.findOrder(words,n,k);
+		    
+		    String temp[] = new String[n];
+		    for(int i=0;i<n;i++)
+		        temp[i] = words[i];
+		    
+		    Arrays.sort(temp, new Comparator<String>(){
+		    
+		      @Override
+                public int compare(String a, String b) {
+                    int index1 = 0;
+                    int index2 = 0;
+                    for(int i = 0; i < Math.min(a.length(), b.length()) 
+                                        && index1 == index2; i++) {
+                        index1 = order.indexOf(a.charAt(i));
+                        index2 = order.indexOf(b.charAt(i));
+                    }
+                
+                    if(index1 == index2 && a.length() != b.length()) 
+                    {
+                        if(a.length() < b.length())
+                            return 1;
+                        else
+                            return 0;
+                    }
+                
+                    if(index1 < index2)
+                        return 1;
+                    else
+                        return 0;
+                        
+                }
+		    });
+		    
+		    int flag = 1;
+		    for(int i=0;i<n;i++)
+		    {
+		        if(!words[i].equals(temp[i]))
+	            {
+	                flag = 0;
+	                break;
+	            }
+		    }
+		    
+		    System.out.println(flag);
+		}
+	}
+	
+}
+// } Driver Code Ends
+
+
+//User function Template for Java
+
+/*
+dict : array of strings denoting the words in alien langauge
+N : Size of the dictionary
+K : Number of characters
+*/
+class TopologicalSort {
+    static int[] topoSort(ArrayList<ArrayList<Integer>> adj, int V) {
+        ArrayList<Integer> indegree = new ArrayList<>(V);
+        int[] result = new int[V];
+        for(int i=0;i<V;++i){
+            indegree.add(0);
+        }
+        for(ArrayList<Integer> list: adj){
+            for(Integer ele: list){
+                indegree.set(ele,indegree.get(ele)+1);
+            }
+        }
+        Queue<Integer> q = new LinkedList<Integer>();
+        for(int i=0;i<indegree.size();++i){
+            if(indegree.get(i).equals(0))
+                q.add(i);
+        }
+        int counter = 0;
+        while(!q.isEmpty()){
+            int ele = q.poll();
+            result[counter] = ele;
+            ArrayList<Integer> neighbours = adj.get(ele);
+            for(Integer neighbour: neighbours){
+                indegree.set(neighbour,indegree.get(neighbour)-1);
+                if(indegree.get(neighbour).equals(0))
+                    q.add(neighbour);
+            }
+            ++counter;
+        }
+        return result;
+    }
+}
+class Solution
+{
+    public String findDifference(String w1, String w2){
+        int length = Math.min(w1.length(),w2.length());
+        int i = 0;
+        while(i<length){
+            if(!w1.substring(i,i+1).equals(w2.substring(i,i+1)))
+                return w1.substring(i,i+1)+" "+w2.substring(i,i+1);
+            ++i;
+        }
+        return "";
+    }
+    public String findOrder(String [] dict, int N, int K)
+    {
+       ArrayList<ArrayList<Integer>> graph = new ArrayList<>(K);
+       for(int i=0;i<K;++i){
+           graph.add(new ArrayList<>(K));
+       }
+       HashMap<String,Integer> indexed = new HashMap<>(K);
+       String[] reverseIndexed = new String[K];
+       for(int i=0,counter=0;i<N-1;++i){
+           String word1 = dict[i];
+           String word2 = dict[i+1];
+           String difference = findDifference(word1,word2);
+           if(difference.length()>0){
+                String[] letter = difference.split(" ");
+                if(!indexed.containsKey(letter[0])){
+                    indexed.put(letter[0],counter++);
+                    reverseIndexed[counter-1]=letter[0];
+                }
+                if(!indexed.containsKey(letter[1])){
+                    indexed.put(letter[1],counter++);
+                    reverseIndexed[counter-1]=letter[1];
+                }
+                graph.get(indexed.get(letter[0])).add(indexed.get(letter[1]));
+           }
+       }
+       int[] list = TopologicalSort.topoSort(graph,K);
+       StringBuffer sb = new StringBuffer();
+       for(int letter: list){
+           sb.append(reverseIndexed[letter]);
+       }
+       return sb.toString();
+    }
+}

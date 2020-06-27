@@ -1,0 +1,42 @@
+
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Scanner;
+
+class SnakeAndLadder {
+	public static void main (String[] args) {
+		Scanner sc = new Scanner(System.in);
+		StringBuffer sb = new StringBuffer();
+		int t = sc.nextInt();
+		while(t-->0){
+		    int n = sc.nextInt();
+		    HashMap<Integer,Integer> ladders = new HashMap<>(n);
+		    for(int i=0;i<n;++i){
+		        ladders.put(sc.nextInt(),sc.nextInt());
+		    }
+		    ArrayList<Integer> dice = new ArrayList<>(31);
+		    for(int i=0;i<31;++i){
+		        dice.add(Integer.MAX_VALUE);
+		    }
+		    dice.set(1,0);
+		    for(int i=1;i<=30;++i){
+		    	int min = Integer.MAX_VALUE;;
+		        if(i==1)
+		            min = 0;
+		        for(int j=i-6;j<i;++j){
+		            if(j<1)
+		                continue;
+		            min = Math.min(min,dice.get(j)+1);
+		        }
+		        dice.set(i,Math.min(min, dice.get(i)));
+		        if(ladders.containsKey(i)){
+		            dice.set(ladders.get(i),Math.min(dice.get(ladders.get(i)),dice.get(i)));
+		        }
+		    }
+		    sb.append(dice.get(30)+"\n");
+		}
+		sc.close();
+		System.out.println(sb);
+	}
+}
