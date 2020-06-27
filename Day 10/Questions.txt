@@ -3,3 +3,95 @@ https://practice.geeksforgeeks.org/problems/alien-dictionary/1
 
 Question 2:
 https://practice.geeksforgeeks.org/problems/snake-and-ladder-problem/0
+
+
+
+
+class Solution {
+	public String findOrder(String[] dict, int N, int K) {
+		ArrayList<ArrayList<Integer>> list = new ArrayList<>(N);
+		for (int i = 0; i < K; i++) {
+			list.add(i, new ArrayList<Integer>());
+		}
+	int len = N;
+		for (int i = 0; i < N-1; i++) {
+	
+			String first = dict[i];
+			String second = dict[i + 1];
+			int min = Math.min(first.length(),second.length());
+			for (int j = 0; j < min; j++) {
+				char ch = first.charAt(j);
+				char next = second.charAt(j);
+				if (ch == next)
+					continue;
+				else {
+					int first1 = ch;
+					int second2= next;
+					list.get(first1-97).add(second2-97);
+					break;
+				}
+			}
+
+		}
+		/*for (int i = 0; i < N; i++) {
+		    for (int j = 0; j < N; j++)
+        	Sytem.out.println(list.get(i).get(j));
+		    
+		}*/
+		//System.out.println(list);
+		int [] arr = topoSort(list,K);
+		String result= "";
+	       for(int i=0;i<K;i++) {
+	    	   if(arr[i]==1)
+	    		   result = result+ "a";
+	    	   else   if(arr[i]==2)
+	    		   result = result+"b";
+	    	   else   if(arr[i]==3)
+	    		   result = result+"c";
+	    	   else   if(arr[i]==4)
+	    		   result = result+"d";
+	    	   else   if(arr[i]==5)
+	    		   result = result+"e";
+	    	   else   if(arr[i]==6)
+	    		   result = result+"f";
+	       }
+
+		return result;
+	}
+
+	static int[] topoSort(ArrayList<ArrayList<Integer>> adj, int N) {
+		int[] res = new int[N];
+		int count = 0;
+		Map<Integer, Integer> indegree = new HashMap<>(N);
+		for (int i = 0; i < N; i++) {
+			indegree.put(i, 0);
+		}
+		for (int i = 0; i < N; i++) {
+			ArrayList<Integer> neighbours = adj.get(i);
+			for (Integer neighbour : neighbours) {
+			    if(null != neighbour )
+				indegree.put(neighbour, indegree.get(neighbour) + 1);
+			}
+		}
+		Stack<Integer> valueStack = new Stack<>();
+		Iterator<Integer> i = indegree.keySet().iterator();
+		while (i.hasNext()) {
+			Integer ele = i.next();
+			if (indegree.get(ele).equals(0)) {
+				valueStack.push(ele);
+			}
+		}
+		while (!valueStack.isEmpty()) {
+			Integer ele1 = valueStack.pop();
+			res[count++] = ele1;
+			ArrayList<Integer> neighbours = adj.get(ele1);
+			for (Integer neighbour : neighbours) {
+				int val = indegree.get(neighbour) - 1;
+				indegree.put(neighbour, val);
+				if (val == 0)
+					valueStack.push(neighbour);
+			}
+		}
+		return res;
+	}
+}
