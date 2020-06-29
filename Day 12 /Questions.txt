@@ -1,0 +1,5 @@
+Question 1:
+https://practice.geeksforgeeks.org/problems/left-view-of-binary-tree/1
+
+Question 2:
+https://practice.geeksforgeeks.org/problems/check-for-bst/1
