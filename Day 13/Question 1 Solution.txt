@@ -1,0 +1,47 @@
+class Tree
+{   
+    Map<Integer,Integer> map = new HashMap<>();
+    
+    public void levelOrder(Node root, Integer value){
+        Queue<Node> q = new LinkedList<>();
+        Queue<Integer> horizontalValues = new LinkedList<>();
+        q.add(root);
+        q.add(null);
+        horizontalValues.add(0);
+        horizontalValues.add(Integer.MAX_VALUE);
+        while(!q.isEmpty()){
+            Node ele = q.poll();
+            Integer val = horizontalValues.poll();
+            if(ele==null){
+                if(!q.isEmpty()){
+                    q.add(null);
+                    horizontalValues.add(Integer.MAX_VALUE);
+                }
+            }
+            else{
+                map.put(val,ele.data);
+                if(ele.left!=null){
+                    q.add(ele.left);
+                    horizontalValues.add(val-1);
+                }
+                if(ele.right!=null){
+                    q.add(ele.right);
+                    horizontalValues.add(val+1);
+                }
+            }
+        }
+    }
+ 
+    // Method that returns the bottom view.
+    public ArrayList <Integer> bottomView(Node root)
+    {
+        levelOrder(root,0);
+        ArrayList<Integer> list = new ArrayList<>(map.keySet());
+        Collections.sort(list);
+        ArrayList<Integer> result = new ArrayList<>(list.size());
+        for(Integer key: list){
+            result.add(map.get(key));
+        }
+        return result;
+    }
+}
