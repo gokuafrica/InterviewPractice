@@ -1,0 +1,21 @@
+public static void connect(Node root)
+        {
+            Queue<Node> q = new LinkedList<>();
+            q.add(root);
+            q.add(null);
+            while(!q.isEmpty()){
+                Node ele = q.poll();
+                if(ele==null){
+                    if(!q.isEmpty()){
+                        q.add(null);
+                    }
+                }
+                else{
+                    ele.nextRight = q.peek();
+                    if(ele.left!=null)
+                        q.add(ele.left);
+                    if(ele.right!=null)
+                        q.add(ele.right);
+                }
+            }
+        }
