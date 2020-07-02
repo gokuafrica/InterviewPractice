@@ -1,0 +1,29 @@
+public class Tree
+{
+    LinkedList<Integer> inorderTraversal = new LinkedList<>();
+    
+    void inorderTraverse(Node root){
+        if(root.left!=null)
+            inorderTraverse(root.left);
+        inorderTraversal.add(root.data);
+        if(root.right!=null)
+            inorderTraverse(root.right);
+    }
+    
+    boolean isBST(Node root)
+        {
+            inorderTraverse(root);
+            HashSet<Integer> unique = new HashSet<>();
+            List<Integer> backup = (LinkedList<Integer>)inorderTraversal.clone();
+            Collections.sort(inorderTraversal);
+            for(int i=0;i<inorderTraversal.size();++i){
+                if(!inorderTraversal.get(i).equals(backup.get(i)))
+                    return false;
+                if(unique.contains(inorderTraversal.get(i))){
+                    return false;
+                }
+                unique.add(inorderTraversal.get(i));
+            }
+            return true;
+        }
+}
