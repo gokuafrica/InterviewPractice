@@ -3,3 +3,93 @@ https://practice.geeksforgeeks.org/problems/left-view-of-binary-tree/1
 
 Question 2:
 https://practice.geeksforgeeks.org/problems/check-for-bst/1
+
+
+
+
+class Tree
+{
+    int leftcount = 0;
+    int rightcount = 0;
+    void leftView(Node root)
+    {
+     int h = height(root); 
+        int i; 
+        for (i=1; i<=h; i++) 
+            printGivenLevel(root, i); 
+    }
+    
+    int height(Node root) 
+    { 
+        if (root == null) 
+           return 0; 
+        else
+        { 
+            int lheight = height(root.left); 
+            int rheight = height(root.right); 
+             
+            if (lheight > rheight) 
+                return(lheight+1); 
+            else return(rheight+1);  
+        } 
+    } 
+    
+     void printGivenLevel (Node root ,int level) 
+    { 
+        if (root == null) 
+            return; 
+        if (level == 1) 
+            System.out.print(root.data + " "); 
+        else if (level > 1) 
+        { 
+            printGivenLevel(root.left, level-1); 
+            if(root.left == null )
+            printGivenLevel(root.right, level-1); 
+        } 
+    } 
+} 
+
+
+
+public class binaryTree {
+	public class Tree {
+		boolean isBST(Node root) {
+
+			ArrayList<Integer> list = new ArrayList<>();
+			printInorder(root, list);
+			boolean flag = false;
+			ArrayList<Integer> compare = new ArrayList<>(list);
+			Collections.sort(list);
+			if (list.size() == 1)
+				return true;
+			for (int i = 0; i < list.size() - 1; i++) {
+				if (list.get(i) == list.get(i + 1))
+					return false;
+				else if (list.get(i) == compare.get(i))
+					flag = true;
+				else
+					flag = false;
+
+			}
+			return flag;
+
+		}
+
+		public ArrayList<Integer> printInorder(Node root, ArrayList<Integer> list) {
+			if (root == null) {
+				return null;
+			}
+			list.add(root.data);
+			
+			if(root.left == null){
+			    list.add(root.right.data);
+			}
+			printInorder(root.left, list);
+			// System.out.print(root.data + " ");
+
+			printInorder(root.right, list);
+
+			return list;
+		}
+	}
+}
