@@ -1,0 +1,20 @@
+class BST
+{   
+    // Returns the LCA of the nodes with values n1 and n2
+    // in the BST rooted at 'root' 
+	Node LCA(Node root, int n1, int n2)
+	{
+	    if(root==null)
+	        return null;
+        int min = (n1<n2)?n1:n2;
+        int max = (n1==min)?n2:n1;
+        if(root.data>=min && root.data<=max)
+            return root;
+        if(root.data>min && root.data>max)
+            return LCA(root.left,n1,n2);
+        if(root.data<min && root.data<max)
+            return LCA(root.right,n1,n2);
+        return null;
+    }
+    
+}

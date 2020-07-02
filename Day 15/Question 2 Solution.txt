@@ -1,0 +1,29 @@
+class GfG
+{
+    Node doubleRoot;
+    Node lastNode;
+    void process(Node root){
+        if(doubleRoot==null){
+            doubleRoot = new Node(root.data);
+            lastNode = doubleRoot;
+        }
+        else{
+            Node temp = lastNode;
+            lastNode = new Node(root.data);
+            temp.right = lastNode;
+            lastNode.left = temp;
+        }
+    }
+    void inOrder(Node root){
+        if(root==null)
+            return;
+        inOrder(root.left);
+        process(root);
+        inOrder(root.right);
+    }
+    Node bToDLL(Node root)
+    {
+	    inOrder(root);
+	    return doubleRoot;
+    }
+}
