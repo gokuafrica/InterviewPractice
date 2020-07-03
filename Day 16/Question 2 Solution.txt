@@ -1,0 +1,51 @@
+class GfG
+{
+    // return true/false denoting whether the tree is Symmetric or not
+    public static boolean isSymmetric(Node root)
+    {
+        if(root==null)
+            return true;
+        if(root.left==null || root.right==null){
+            if(root.left==root.right)
+                return true;
+            else
+                return false;
+        }
+        Queue<Node> q1 = new LinkedList<>();
+        Queue<Node> q2 = new LinkedList<>();
+
+        q1.add(root.left);
+        q1.add(null);
+        
+        q2.add(root.right);
+        q2.add(null);
+        
+        while(!q1.isEmpty() || !q2.isEmpty()){
+            Node ele1 = q1.poll();
+            Node ele2 = q2.poll();
+            if(ele1==null || ele2==null){
+                if(ele1==ele2){
+                    if(!q1.isEmpty())
+                        q1.add(null);
+                    if(!q2.isEmpty())
+                        q2.add(null);
+                }
+                else
+                    return false;
+            }
+            else{
+                if(ele1.data!=ele2.data)
+                    return false;
+                if(ele1.left!=null)
+                    q1.add(ele1.left);
+                if(ele2.right!=null)
+                    q2.add(ele2.right);
+                if(ele1.right!=null)
+                    q1.add(ele1.right);
+                if(ele2.left!=null)
+                    q2.add(ele2.left);
+            }
+        }
+        return true;
+    }
+}

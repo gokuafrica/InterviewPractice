@@ -1,0 +1,40 @@
+class Tree
+{
+    boolean inOrder(Node root1, Node root2){
+        if(root1==null || root2==null){
+            if(root1==root2)
+                return true;
+            else
+                return false;
+        }
+        if(!inOrder(root1.left,root2.left))
+            return false;
+        if(root1.data!=root2.data)
+            return false;
+        if(!inOrder(root1.right,root2.right))
+            return false;
+        return true;
+    }
+    
+    boolean preOrder(Node root1, Node root2){
+        if(root1==null || root2==null){
+            if(root1==root2)
+                return true;
+            else
+                return false;
+        }
+        if(root1.data!=root2.data)
+            return false;
+        if(!preOrder(root1.left,root2.left))
+            return false;
+        if(!preOrder(root1.right,root2.right))
+            return false;
+        return true;
+    }
+    
+	boolean isIdentical(Node root1, Node root2)
+	{
+	    return (inOrder(root1,root2) && preOrder(root1,root2));
+	}
+	
+}
