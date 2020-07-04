@@ -1,0 +1,31 @@
+class Tree
+{
+    // return the Height of the given Binary Tree
+    int height(Node root) 
+    {
+        int h = 0;
+        if(root==null)
+            return h;
+        Queue<Node> q = new LinkedList<>();
+        q.add(root);
+        q.add(null);
+        while(!q.isEmpty()){
+            Node ele = q.poll();
+            if(ele==null){
+                if(!q.isEmpty()){
+                    q.add(null);
+                    ++h;
+                }
+            }
+            else{
+                if(null!=ele.left){
+                    q.add(ele.left);
+                }
+                if(null!=ele.right){
+                    q.add(ele.right);
+                }
+            }
+        }
+        return ++h;
+    }   
+}

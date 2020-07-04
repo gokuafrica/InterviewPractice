@@ -1,0 +1,22 @@
+class Tree
+{
+    int max = Integer.MIN_VALUE;
+    int preOrder(Node root){
+        if(root==null)
+            return Integer.MIN_VALUE;
+        if(root.left==null && root.right==null){
+            return root.data;
+        }
+        int left = preOrder(root.left);
+        int right = preOrder(root.right);
+        if(left!=Integer.MIN_VALUE && right!=Integer.MIN_VALUE && max<left+right+root.data)
+            max = left+right+root.data;
+        int lmax = (left>right)?left:right;
+        return lmax+root.data;
+    }
+    int maxPathSum(Node root)
+    { 
+         preOrder(root);
+         return max;
+    } 
+}
