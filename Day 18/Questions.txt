@@ -1,0 +1,5 @@
+Question 1:
+https://practice.geeksforgeeks.org/problems/diameter-of-binary-tree/1
+
+Question 2:
+https://practice.geeksforgeeks.org/problems/count-leaves-in-binary-tree/1
