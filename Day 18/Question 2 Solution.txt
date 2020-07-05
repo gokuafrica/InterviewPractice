@@ -1,0 +1,19 @@
+class Tree
+{
+    int leaves = 0;
+    
+    void preOrder(Node root){
+        if(root==null)
+            return;
+        if(root.left==null && root.right==null)
+            ++leaves;
+        preOrder(root.left);
+        preOrder(root.right);
+    }
+    
+    int countLeaves(Node node) 
+    {
+         preOrder(node);
+         return leaves;
+    }
+}

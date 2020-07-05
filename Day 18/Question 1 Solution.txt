@@ -1,0 +1,27 @@
+class Tree {
+    
+    int dia = 0;
+    
+    int postOrder(Node root){
+        if(root==null){
+            return 0;
+        }
+        if(root.left==null && root.right==null){
+            if(1>dia)
+                dia=1;
+            return 1;
+        }
+        int left = postOrder(root.left);
+        int right = postOrder(root.right);
+        if(dia<left+right+1)
+            dia = left+right+1;
+        int max = (left>right)?left:right;
+        return max+1;
+    }
+    
+    /* Complete the function to get diameter of a binary tree */
+    int diameter(Node root) {
+        postOrder(root);
+        return dia;
+    }
+}
