@@ -3,3 +3,83 @@ https://practice.geeksforgeeks.org/problems/bottom-view-of-binary-tree/1
 
 Question 2:
 https://practice.geeksforgeeks.org/problems/print-a-binary-tree-in-vertical-order/1
+
+
+
+
+class Tree
+{
+  public ArrayList<Integer> bottomView(Node root)
+    {
+        if(root==null)
+            return null;
+        HashMap<Integer,Integer> hmap=new HashMap<>();
+        Queue<Node> q=new LinkedList<>();
+        root.hd=0;
+        q.add(root);
+        Node temp;
+        while(!q.isEmpty()){
+            temp=q.remove();
+            hmap.put(temp.hd,temp.data);
+            if(temp.left!=null){
+                temp.left.hd=temp.hd-1;
+                q.add(temp.left);
+            }
+            if(temp.right!=null){
+                temp.right.hd=temp.hd+1;
+                q.add(temp.right);
+            }
+        }
+        ArrayList<Integer>list=new ArrayList<>(hmap.keySet());
+        ArrayList<Integer>list1 = new ArrayList<>(); 
+        Collections.sort(list);
+        for(int i:list)
+           list1.add(hmap.get(i));
+           // System.out.print(hmap.get(i)+" ");
+        // Your code here
+        return list1;
+    }
+}
+
+
+class BinaryTree
+{
+    static ArrayList<Integer> verticalOrder(Node root)
+    {
+        class QueueObj {
+            Node node;
+            int hd;
+            
+            public QueueObj(Node root, int d) {
+                node = root;
+                hd = d;
+            }
+        }
+        Map<Integer, List<Integer>> map = new TreeMap<>();
+        int hd = 0;
+        Queue<QueueObj> queue = new LinkedList<>();
+        ArrayList<Integer> lst = new ArrayList<>();  
+        queue.add(new QueueObj(root, 0));
+        
+        while(!queue.isEmpty()) {
+            QueueObj temp = queue.poll();
+            if(!map.containsKey(temp.hd)) {
+                map.put(temp.hd, new ArrayList<>());
+            }
+            List<Integer> list = map.get(temp.hd);
+            list.add(temp.node.data);
+            map.put(temp.hd, list);
+            if(temp.node.left != null) queue.add(new QueueObj(temp.node.left, temp.hd - 1));
+            if(temp.node.right != null) queue.add(new QueueObj(temp.node.right, temp.hd + 1));
+        }
+        
+        for(Map.Entry<Integer,List<Integer>> set: map.entrySet()) {
+            for(int i: set.getValue()) {
+                //System.out.print(i + " ");
+               lst.add(i);
+            }
+        }
+         return lst;
+    }
+       
+    }
