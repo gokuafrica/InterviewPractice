@@ -1,0 +1,5 @@
+Question 1:
+https://practice.geeksforgeeks.org/problems/activity-selection/0
+
+Question 2:
+https://practice.geeksforgeeks.org/problems/n-meetings-in-one-room/0
