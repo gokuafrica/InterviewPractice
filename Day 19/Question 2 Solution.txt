@@ -1,0 +1,58 @@
+class Tree {
+	public void serialize(Node root, ArrayList<Integer> A) {
+	    Queue<Node> q = new LinkedList<>();
+	    if(root==null)
+	        return;
+	    q.add(root);
+	    q.add(null);
+	    A.add(root.data);
+	    while(!q.isEmpty()){
+	        Node ele = q.poll();
+	        if(ele==null){
+	            if(!q.isEmpty()){
+	                q.add(null);
+	            }
+	        }
+	        else{
+	            if(ele.left!=null){
+	                A.add(ele.left.data);
+	                q.add(ele.left);
+	            }
+	            else
+	                A.add(null);
+	            if(ele.right!=null){
+	                A.add(ele.right.data);
+	                q.add(ele.right);
+	            }
+	            else
+	                A.add(null);
+	            
+	        }
+	    }
+	}
+	
+    public Node deSerialize(ArrayList<Integer> A){
+        Node root=null;
+        Queue<Node> q = new LinkedList<>();
+        if(A.size()==0 || A.get(0)==null)
+            return null;
+        q.add(new Node(A.get(0)));
+        int n = 0;
+        boolean flag = true;
+        while(!q.isEmpty()){
+            Node ele = q.poll();
+            if(root==null)
+                root = ele;
+            Integer left = A.get(n*2+1);
+            Integer right = A.get(n*2+2);
+            ele.left = (left==null)?null:new Node(left);
+            ele.right = (right==null)?null:new Node(right);
+            if(ele.left!=null)
+                q.add(ele.left);
+            if(ele.right!=null)
+                q.add(ele.right);
+            ++n;
+        }
+        return root;
+    }
+}
