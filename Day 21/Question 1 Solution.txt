@@ -1,0 +1,42 @@
+class GFG {
+	public static void main (String[] args) {
+		Scanner sc = new Scanner(System.in);
+		StringBuffer sb = new StringBuffer();
+		int t = sc.nextInt();
+		while(t-->0){
+		    int n = sc.nextInt();
+		    int k = sc.nextInt();
+		    LinkedList<Integer> coins = new LinkedList<>();
+		    for(int i=0;i<n;++i)
+		        coins.add(sc.nextInt());
+		    Collections.sort(coins);
+		    int min = coins.get(0);
+		    int count = 0;
+		    for(Integer coin:coins){
+		        if(coin-min>k){
+		            count+=coin-min-k;
+		        }
+		    }
+		    int mymin = count;
+		    count = 0;
+		    for(int i=0;i<n-1;++i) {
+		    	int ele = coins.removeFirst();
+		    	count += ele;
+		    	min = coins.get(0);
+		    	if(ele==min)
+		        	continue;
+		    	int count2 = count;
+		    	for(Integer coin:coins){
+			        if(coin-min>k){
+			        	count2+=coin-min-k;
+			        }
+			    }
+		    	if(count2<mymin)
+		    		mymin=count2;
+		    }
+		    sb.append(mymin+"\n");
+		}
+		sc.close();
+		System.out.println(sb);
+	}
+}
