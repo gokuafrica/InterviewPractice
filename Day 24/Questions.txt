@@ -1,0 +1,5 @@
+Question 1:
+https://practice.geeksforgeeks.org/problems/minimize-the-heights/0
+
+Question 2:
+https://practice.geeksforgeeks.org/problems/minimize-the-sum-of-product/0
