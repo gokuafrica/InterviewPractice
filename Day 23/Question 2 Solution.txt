@@ -1,0 +1,37 @@
+/*package whatever //do not write package name here */
+
+import java.util.*;
+import java.lang.*;
+import java.io.*;
+import java.math.*;
+
+class GFG {
+	public static void main (String[] args) {
+		Scanner sc = new Scanner(System.in);
+		StringBuffer sb = new StringBuffer();
+		int t = sc.nextInt();
+		while(t-->0){
+		    int n = sc.nextInt();
+		    int s = sc.nextInt();
+		    if(9*n<s || s==0)
+		        sb.append(-1+"\n");
+		    else{
+    		    BigInteger num = new BigInteger("0");
+    		    for(int i=0;i<n;++i){
+    		        BigInteger ten = new BigInteger("10");
+    		        if(s<=9){
+    		            num = num.add( ten.pow(n-i-1).multiply(BigInteger.valueOf(s)));
+    		            s=0;
+    		        }
+    		        else{
+    		            s-=9;
+    		            num = num.add( ten.pow(n-i-1).multiply(BigInteger.valueOf(9)));
+    		        }
+    		    }
+    		    sb.append(num+"\n");
+		    }
+		}
+		sc.close();
+		System.out.println(sb);
+	}
+}

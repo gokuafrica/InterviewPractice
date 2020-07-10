@@ -1,0 +1,68 @@
+
+import java.util.*;
+import java.lang.*;
+import java.io.*;
+
+class GFG {
+    static class LRU{
+        int fault;
+        ArrayList<Integer> q;
+		HashMap<Integer,Integer> map;
+		int capacity;
+		int maxCapacity;
+		LRU(int capacity){
+		    q = new ArrayList<>(capacity);
+		    map = new HashMap<>(capacity);
+		    fault = 0;
+		    this.capacity = 0;
+		    this.maxCapacity = capacity;
+		}
+		public void search(Integer ele){
+		    if(map.containsKey(ele)){
+		        int pos = map.get(ele);
+		        for(int i=pos;i<capacity-1;++i){
+		            q.set(i,q.get(i+1));
+		            map.put(q.get(i+1),i);
+		        }
+		        q.set(capacity-1,ele);
+		        map.put(ele,capacity-1);
+		    }
+		    else{
+		        ++fault;
+		        if(capacity<maxCapacity){
+		            q.add(ele);
+		            map.put(ele,capacity);
+		            ++capacity;
+		        }
+		        else{
+		            map.remove(q.get(0));
+		            for(int i=0;i<capacity-1;++i) {
+		            	q.set(i,q.get(i+1));
+		            	map.put(q.get(i+1), i);
+		            }
+		            q.set(capacity-1,ele);
+		            map.put(ele,capacity-1);
+		        }
+		    }
+		}
+    }
+	public static void main (String[] args) {
+		Scanner sc = new Scanner(System.in);
+		StringBuffer sb = new StringBuffer();
+		int t = sc.nextInt();
+		while(t-->0){
+		    int n = sc.nextInt();
+		    ArrayList<Integer> input = new ArrayList<>(n);
+		    for(int i=0;i<n;++i)
+		        input.add(sc.nextInt());
+		    int capacity = sc.nextInt();
+		    LRU cache = new LRU(capacity);
+            for(Integer page: input){
+                cache.search(page);
+            }
+            sb.append(cache.fault+"\n");
+		}
+		sc.close();
+		System.out.println(sb);
+	}
+}
