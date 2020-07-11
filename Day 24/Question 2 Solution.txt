@@ -1,0 +1,32 @@
+/*package whatever //do not write package name here */
+
+import java.util.*;
+import java.lang.*;
+import java.io.*;
+import java.math.*;
+
+class GFG {
+	public static void main (String[] args) {
+		Scanner sc = new Scanner(System.in);
+		StringBuffer sb = new StringBuffer();
+		int t = sc.nextInt();
+		while(t-->0){
+		    int n = sc.nextInt();
+		    ArrayList<BigInteger> a = new ArrayList<>(n);
+		    ArrayList<BigInteger> b = new ArrayList<>(n);
+		    for(int i = 0;i<n;++i)
+		        a.add(sc.nextBigInteger());
+		    for(int i = 0;i<n;++i)
+		        b.add(sc.nextBigInteger());
+		    Collections.sort(a);
+		    Collections.sort(b,Collections.reverseOrder());
+		    BigInteger sum = new BigInteger("0");
+		    for(int i=0;i<n;++i){
+		        sum = sum.add(a.get(i).multiply(b.get(i)));
+		    }
+		    sb.append(sum+"\n");
+		}
+		sc.close();
+		System.out.println(sb);
+	}
+}
