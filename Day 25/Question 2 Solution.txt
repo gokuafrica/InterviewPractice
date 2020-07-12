@@ -1,0 +1,37 @@
+class MST {
+    static class Node implements Comparable<Node>{
+        Integer node;
+        Integer value;
+        public int compareTo(Node a){
+            if(a.value>this.value)
+                return -1;
+            else if(a.value<this.value)
+                return 1;
+            else
+                return 0;
+        }
+        Node(int node, int value){
+            this.node = new Integer(node);
+            this.value = new Integer(value);
+        }
+    }
+    static int spanningTree(int V, int E, ArrayList<ArrayList<Integer>> graph) {
+        Queue<Node> q = new PriorityQueue<>();
+        HashSet<Integer> visited = new HashSet<>();
+        q.add(new Node(0,0));
+        int counter = 0;
+        while(!q.isEmpty()){
+            Node ele = q.poll();
+            if(visited.contains(ele.node))
+                continue;
+            visited.add(ele.node);
+            counter+=ele.value;
+            ArrayList<Integer> neighbours = graph.get(ele.node);
+            for(int i=0;i<neighbours.size();++i){
+                if(i!=ele.node && !neighbours.get(i).equals(Integer.MAX_VALUE) && !visited.contains(i))
+                    q.add(new Node(i,neighbours.get(i)));
+            }
+        }
+        return counter;
+    }
+}

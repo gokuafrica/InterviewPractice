@@ -1,0 +1,32 @@
+class GfG {
+    // your required to complete this function
+    // this function should return the encoded string
+    // see the main function for the minHeapNode reference
+    HashMap<String,Character> huffmanDecodes = new HashMap<>();
+    
+    void preOrder(minHeapNode root, String pattern){
+        if(root==null)
+            return;
+        if(root.left==null && root.right==null)
+            huffmanDecodes.put(pattern,root.data);
+        preOrder(root.left,pattern+"0");
+        preOrder(root.right,pattern+"1");
+    }
+    
+    String decodeString(minHeapNode root, String encodedStr){
+        preOrder(root,"");
+        StringBuffer sb = new StringBuffer();
+        for(int i=0;i<encodedStr.length();){
+            int j = i;
+            while(true){
+                if(huffmanDecodes.containsKey(encodedStr.substring(i,j+1))){
+                    sb.append(huffmanDecodes.get(encodedStr.substring(i,j+1)));
+                    i=j+1;
+                    break;
+                }
+                ++j;
+            }
+        }
+        return sb.toString();
+    }
+}
