@@ -1,0 +1,69 @@
+/*package whatever //do not write package name here */
+
+import java.util.*;
+import java.lang.*;
+import java.io.*;
+
+class GFG {
+    public static ArrayList<Integer> generateFinalArray(int n, int[] a, HashSet<Integer> common){
+        ArrayList<Integer> finalA = new ArrayList<>(n);
+		finalA.add(0);
+		for(int i=0;i<n;++i){
+	        if(!common.contains(new Integer(a[i]))){
+	            finalA.set(finalA.size()-1,finalA.get(finalA.size()-1)+a[i]);
+	        }
+	        else{
+	            if(i>0 && a[i-1]==a[i]){
+	                finalA.remove(finalA.size()-1);
+	                finalA.set(finalA.size()-1,finalA.get(finalA.size()-1)+a[i]);
+	                finalA.add(0);
+	            }
+	            else{
+	                finalA.add(a[i]);
+	                finalA.add(0);
+	            }
+	        }
+	    }
+	    return finalA;
+    }
+	public static void main (String[] args) {
+		Scanner sc = new Scanner(System.in);
+		StringBuffer sb = new StringBuffer();
+		int t = sc.nextInt();
+		while(t-->0){
+		    int n = sc.nextInt();
+		    int m = sc.nextInt();
+		    int[] a = new int[n];
+		    int[] b = new int[m];
+		    HashSet<Integer> set = new HashSet<>();
+		    HashSet<Integer> common = new HashSet<>();
+		    for(int i=0;i<n;++i){
+		        int ele = sc.nextInt();
+		        set.add(ele);
+		        a[i]=ele;
+		    }
+		    for(int i=0;i<m;++i){
+		        int ele = sc.nextInt();
+		        b[i]=ele;
+		        if(set.contains(ele))
+		            common.add(ele);
+		    }
+		    ArrayList<Integer> finalA = generateFinalArray(n,a,common);
+		    ArrayList<Integer> finalB = generateFinalArray(m,b,common);
+		    int size = (finalA.size()>finalB.size())?finalA.size():finalB.size();
+		    int result = 0;
+		    for(int i=0;i<size;++i){
+		        int x = 0;
+		        int y = 0;
+		        if(i<finalA.size())
+		            x = finalA.get(i);
+		        if(i<finalB.size())
+		            y = finalB.get(i);
+		        result+=(x>y)?x:y;
+		    }
+		    sb.append(result+"\n");    
+		}
+		sc.close();
+		System.out.println(sb);
+	}
+}

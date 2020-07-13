@@ -1,0 +1,40 @@
+/*package whatever //do not write package name here */
+
+import java.util.*;
+import java.lang.*;
+import java.io.*;
+
+class GFG {
+	public static void main (String[] args) {
+		Scanner sc = new Scanner(System.in);
+		StringBuffer sb = new StringBuffer();
+		int t = sc.nextInt();
+		while(t-->0){
+		    int n = sc.nextInt();
+		    int k = sc.nextInt();
+		    ArrayList<Integer> candies = new ArrayList<>(n);
+		    int min = 0;
+		    int max = 0;
+		    for(int i=0;i<n;++i)
+		        candies.add(sc.nextInt());
+		    Collections.sort(candies);
+		    int nb = n;
+		    int i = 0;
+		    while(nb>0){
+		        min+=candies.get(i);
+		        nb=nb-k-1;
+		        ++i;
+		    }
+		    nb = n;
+		    i = n-1;
+		    while(nb>0){
+		        max+=candies.get(i);
+		        nb=nb-k-1;
+		        --i;
+		    }
+		    sb.append(min+" "+max+"\n");
+		}
+		sc.close();
+		System.out.println(sb);
+	}
+}
