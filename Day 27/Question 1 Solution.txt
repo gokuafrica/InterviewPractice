@@ -1,0 +1,75 @@
+/*package whatever //do not write package name here */
+
+import java.util.*;
+import java.lang.*;
+import java.io.*;
+
+class GFG {
+    static int m,n,k;
+    static HashSet<Coordinate> set;
+    static ArrayList<ArrayList<Integer>> arr;
+    static class Coordinate{
+        int x, y;
+        Coordinate(int x,int y){
+            this.x = x;
+            this.y = y;
+        }
+        public int hashCode(){
+            return x*n+y;
+        }
+        public boolean equals(Object obj){
+            Coordinate a = (Coordinate) obj;
+            if(a.x==this.x && a.y==this.y)
+                return true;
+            else
+                return false;
+        }
+    }
+    private static void process(int x,int y){
+        if(!set.contains(new Coordinate(x,y)))
+            return;
+        if(arr.get(x).get(y)==k)
+            return;
+        arr.get(x).set(y,k);
+        process(x-1,y);
+        process(x,y-1);
+        process(x,y+1);
+        process(x+1,y);
+    }
+	public static void main (String[] args) {
+		Scanner sc = new Scanner(System.in);
+		StringBuffer sb = new StringBuffer();
+		int t = sc.nextInt();
+		while(t-->0){
+		    m = sc.nextInt();
+		    n = sc.nextInt();
+		    arr = new ArrayList<>(m);
+		    for(int i=0;i<m;++i){
+		        arr.add(new ArrayList<>(n));
+		        for(int j=0;j<n;++j){
+		            arr.get(i).add(sc.nextInt());
+		        }
+		    }
+		    int x = sc.nextInt();
+		    int y = sc.nextInt();
+		    k = sc.nextInt();
+		    int ele = arr.get(x).get(y);
+		    set = new HashSet<>();
+		    for(int i=0;i<m;++i){
+		        for(int j=0;j<n;++j){
+		            if(arr.get(i).get(j).equals(ele))
+		                set.add(new Coordinate(i,j));
+		        }
+		    }
+		    process(x,y);
+		    for(int i=0;i<m;++i){
+		        for(int j=0;j<n;++j){
+		            sb.append(arr.get(i).get(j)+" ");
+		        }
+		    }
+		    sb.append("\n");
+		}
+		sc.close();
+		System.out.println(sb);
+	}
+}
