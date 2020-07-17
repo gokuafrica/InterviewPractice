@@ -1,0 +1,61 @@
+/*package whatever //do not write package name here */
+
+import java.util.*;
+import java.lang.*;
+import java.io.*;
+
+class GFG {
+    List<Long> a;
+    LinkedHashSet<List<String>> resultSet;
+    long sum;
+    GFG(List<Long> a, long sum){
+        this.a = a;
+        this.sum = sum;
+        resultSet = new LinkedHashSet<>();
+    }
+    void addToResult(long num){
+        resultSet.add(new LinkedList<>(Arrays.asList(Long.toString(num).split(""))));
+    }
+    void recur(long num,int index, long curSum){
+        if(curSum==this.sum){
+            addToResult(num);
+            return;
+        }
+        if(curSum>this.sum)
+            return;
+        for(int i = index+1;i<a.size();++i){
+            recur(num*10+a.get(i),i,curSum+a.get(i));
+        }
+    }
+	public static void main (String[] args) {
+		Scanner sc = new Scanner(System.in);
+		StringBuffer sb = new StringBuffer();
+		int t = sc.nextInt();
+		while(t-->0){
+		    int n = sc.nextInt();
+		    ArrayList<Long> a = new ArrayList<>();
+		    for(int i = 0;i<n;++i){
+		        a.add(sc.nextLong());
+		    }
+		    long sum = sc.nextLong();
+		    Collections.sort(a);
+		    GFG g = new GFG(a,sum);
+		    for(int i=0;i<n;++i){
+		        g.recur(a.get(i),i,a.get(i));
+		    }
+		    if(g.resultSet.size()==0)
+		        sb.append("Empty");
+		    for(List<String> list: g.resultSet){
+		        sb.append("(");
+		        for(String ele: list){
+		            sb.append(ele+" ");
+		        }
+		        sb.deleteCharAt(sb.length() - 1);
+		        sb.append(")");
+		    }
+		    sb.append("\n");
+		}
+		sc.close();
+		System.out.println(sb);
+	}
+}

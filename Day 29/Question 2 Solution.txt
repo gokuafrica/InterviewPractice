@@ -1,0 +1,32 @@
+/*package whatever //do not write package name here */
+
+import java.util.*;
+import java.lang.*;
+import java.io.*;
+
+class GFG {
+    static int[] mem = new int[76];
+    public static int recur(int n){
+        if(n<7)
+            return n;
+        if(mem[n]!=0)
+            return mem[n];
+        int max = 0;
+        for(int i=n-3,j=2;i>0;--i,++j){
+            max = Math.max(max,recur(i)*j);
+        }
+        mem[n]=max;
+        return max;
+    }
+	public static void main (String[] args) {
+		Scanner sc = new Scanner(System.in);
+		StringBuffer sb = new StringBuffer();
+		int t = sc.nextInt();
+		while(t-->0){
+		    int n = sc.nextInt();
+		    sb.append(recur(n)+"\n");
+		}
+		sc.close();
+		System.out.println(sb);
+	}
+}
