@@ -1,0 +1,157 @@
+
+
+
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.Set;
+@SuppressWarnings("unchecked")
+public class MinimumCost {
+
+    static Map<LinkedList<Integer>,Integer> map;
+    static int[] arr;
+    static int N;
+    static int x;
+    static int result;
+    public static void main(String[] args) {
+        N = 5;
+        x = 70;
+        arr = new int[N];
+        arr[0] = 100;
+        arr[1] = 60;
+        arr[2] = 30;
+        arr[3] = 100;
+        arr[4] = 30;
+//        arr[5] = 30;
+        map = new HashMap<>();
+        result = Integer.MAX_VALUE;
+        if(N==1)
+        	System.out.println(arr[0]);
+        else
+        	System.out.println(minPriceUtil(arr, N, x));
+    }
+    
+	public static Map<LinkedList<Integer>,Integer> cloneMap(){
+    	Map<LinkedList<Integer>,Integer> cloned = new HashMap<>(map.size(),1);
+    	for(Map.Entry<LinkedList<Integer>, Integer> e: map.entrySet()) {
+    		cloned.put((LinkedList<Integer>)e.getKey().clone(),e.getValue());
+    	}
+    	return cloned;
+    }
+    public static void populateMap(int i, LinkedList<Integer> list){
+        if(i==MinimumCost.N+1){
+            int sum = 0;
+            for(Integer ele: list){
+                sum+=arr[ele-1];
+            }
+            map.put(list,sum);
+            return;
+        }
+        LinkedList<Integer> list1 = (LinkedList<Integer>)list.clone();
+        LinkedList<Integer> list2 = (LinkedList<Integer>)list.clone();
+        list1.add(i);
+        populateMap(i+1,list1);
+        populateMap(i+1,list2);
+    }
+    public static Set<Integer> putInSet(LinkedList<Integer> list){
+    	HashSet<Integer> result = new HashSet<Integer>(list.size(),1);
+    	for(Integer ele: list)
+    		result.add(ele);
+    	return result;
+    }
+    public static boolean isInSet(Set<Integer> set, LinkedList<Integer> list) {
+    	for(Integer ele: list) {
+    		if(set.contains(ele)) 
+    			return true;
+    	}
+    	return false;
+    }
+    public static LinkedList<Integer> mergeLists(LinkedList<Integer> list1, LinkedList<Integer> list2){
+    	LinkedList<Integer> result = new LinkedList<Integer>();
+    	int i=0,j=0;
+    	while(i<list1.size() && j<list2.size()) {
+    		if(list1.get(i)<list2.get(j)) {
+    			result.add(list1.get(i));
+    			++i;
+    		}
+    		else {
+    			result.add(list2.get(j));
+    			++j;
+    		}
+    	}
+    	for(;i<list1.size();++i) {
+    		result.add(list1.get(i));
+    	}
+    	for(;j<list2.size();++j) {
+    		result.add(list2.get(j));
+    	}
+    	return result;
+    }
+    public static int minPriceUtil(int[] arr, int n, int x){
+        populateMap(1,new LinkedList<>());
+        int stage = 0;
+        Map<LinkedList<Integer>,Integer> currentStage = cloneMap();
+        Map<LinkedList<Integer>,Integer> nextStage = null;
+        while(stage<n && currentStage.size()>0) {
+        	if(stage!=0) {
+        		currentStage = nextStage;
+        	}
+        	nextStage = new HashMap<>(currentStage.size(),1);
+        	for(Map.Entry<LinkedList<Integer>, Integer> e: currentStage.entrySet()) {
+        		if(e.getKey().size()==n) {
+        			if(result>e.getValue())
+        				result = e.getValue();
+        			continue;
+        		}
+        		LinkedList<Integer> list = transform(e.getKey(),stage);
+        		Set<Integer> set = putInSet(list);
+        		int value = transform(e.getValue(),stage,x);
+        		for(Map.Entry<LinkedList<Integer>, Integer> ele: map.entrySet()) {
+        			if(ele.getValue()<MinimumCost.result-value) {
+        				if(!isInSet(set,ele.getKey())){
+        					LinkedList<Integer> merged = mergeLists(list, ele.getKey());
+        					if(merged.size()==n) {
+        						if(result>value+ele.getValue())
+        	        				result = value+ele.getValue();
+        	        			continue;
+        					}
+        					if(nextStage.containsKey(merged)) {
+        						if(nextStage.get(merged)>value+ele.getValue())
+        							nextStage.put(merged, value+ele.getValue());
+        					}
+        					else
+        						nextStage.put(merged, value+ele.getValue());
+        				}
+        			}
+        		}
+        	}
+        	++stage;
+        }
+        return MinimumCost.result;
+    }
+
+	private static int transform(Integer value, int stage, int x) {
+		if(stage==0)
+			return value;
+		else
+			return value+x;
+	}
+
+	private static LinkedList<Integer> transform(LinkedList<Integer> key, int stage) {
+		if(stage==0)
+			return key;
+		LinkedList<Integer> result = new LinkedList<Integer>();
+		boolean containsOne = false;
+		for(Integer ele: key) {
+			if(ele==1)
+				containsOne = true;
+			else {
+				result.add(ele-1);
+			}
+		}
+		if(containsOne)
+			result.add(MinimumCost.N);
+		return result;
+	}
+}

@@ -1,0 +1,52 @@
+// { Driver Code Starts
+/*package whatever //do not write package name here */
+
+import java.io.*;
+import java.util.*;
+class Recursion {
+	public static void main (String[] args) {
+		Scanner sc=new Scanner(System.in);
+		
+		int T=sc.nextInt();
+		while(T-->0)
+		{
+		    Josephus obj=new Josephus();
+		    
+		    int n,k;
+		    n=sc.nextInt();
+		    k=sc.nextInt();
+		    
+		    System.out.println(obj.josephus(n,k));
+		    
+		    
+		}
+		
+	}
+}
+
+// } Driver Code Ends
+
+
+class Josephus
+{
+    public int josephus(int n, int k)
+    {
+        HashSet<Integer> dead = new HashSet<>();
+        int count = 0, i = -1, result = 0;
+        while(dead.size()<n){
+            i = (i+1)%n;
+            while(dead.contains(i))
+                i = (i+1)%n;
+            ++count;
+            if(count==k){
+                dead.add(i);
+                count=0;
+                if(dead.size()==n)
+                    result = i+1;
+            }
+        }
+        return result;
+    }
+
+}
+
