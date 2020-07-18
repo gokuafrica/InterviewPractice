@@ -1,0 +1,5 @@
+Question 1:
+https://practice.geeksforgeeks.org/problems/n-queen-problem/0
+
+Question 2:
+https://practice.geeksforgeeks.org/problems/solve-the-sudoku/0
