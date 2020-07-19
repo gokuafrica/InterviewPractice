@@ -1,0 +1,56 @@
+/*package whatever //do not write package name here */
+
+import java.util.*;
+import java.lang.*;
+import java.io.*;
+
+class GFG {
+    static List<LinkedList<Integer>> paths;
+    static int n;
+    public static boolean verify(int pos, List<Integer> path){
+        for(int i=path.size()-1,j=pos-1,k=pos+1;i>=0;--i,--j,++k){
+            if(path.get(i)==pos)
+                return false;
+            if(path.get(i)==j)
+                return false;
+            if(path.get(i)==k)
+                return false;
+        }
+        return true;
+    }
+    public static void recur(int pos, LinkedList<Integer> path){
+        if(!verify(pos,path))
+            return;
+        path.add(pos);
+        if(path.size()==n){
+            paths.add(path);
+            return;
+        }
+        for(int i=0;i<n;++i)
+            recur(i,(LinkedList<Integer>)path.clone());
+    }
+	public static void main (String[] args) {
+		Scanner sc = new Scanner(System.in);
+		StringBuffer sb = new StringBuffer();
+		int t = sc.nextInt();
+		while(t-->0){
+		    n = sc.nextInt();
+		    paths = new LinkedList<>();
+		    for(int i=0;i<n;++i)
+		        recur(i,new LinkedList<>());
+		    boolean flag = false;
+		    for(LinkedList<Integer> path: paths){
+		        flag = true;
+		        sb.append("[");
+		        for(Integer ele: path)
+		            sb.append((ele+1)+" ");
+		        sb.append("] ");
+		    }
+		    if(!flag)
+		        sb.append("-1");
+		    sb.append("\n");
+		}
+		System.out.println(sb);
+		sc.close();
+	}
+}
