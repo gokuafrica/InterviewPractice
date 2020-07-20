@@ -1,0 +1,148 @@
+import java.util.*;
+
+class GFG {
+	public static int charPos = 96;
+	Node root;
+	char[][] boggle;
+	int m, n;
+	HashSet<String> words;
+
+	GFG(Node root, char[][] arr, int m, int n) {
+		this.root = root;
+		this.boggle = arr;
+		this.m = m;
+		this.n = n;
+		this.words = new HashSet<>(10,1);
+	}
+
+	@SuppressWarnings("unchecked")
+	public void recur(String word, Node root, Coordinate ele, HashSet<Coordinate> visited) {
+		visited.add(ele);
+		if (root.next[0] != null)
+			words.add(word);
+		List<Coordinate> neighbours = getPotentialNeighbours(root, ele, visited);
+		for (Coordinate neighbour : neighbours) {
+			recur(word + neighbour.value, root.next[neighbour.value - charPos], neighbour,
+					(HashSet<Coordinate>) visited.clone());
+		}
+	}
+
+	public List<Coordinate> getPotentialNeighbours(Node root, Coordinate ele, HashSet<Coordinate> visited) {
+		List<Coordinate> neighbours = new ArrayList<>(8);
+		int i = ele.x, j = ele.y;
+		int[] x = { -1, -1, -1, 0, 0, 1, 1, 1 };
+		int[] y = { -1, 0, 1, -1, 1, -1, 0, 1 };
+		for (int k = 0; k < x.length; ++k) {
+			if(i+x[k]<0 || i+x[k]>=m || j+y[k]<0 || j+y[k]>=n)
+				continue;
+			if (root.next[boggle[i+x[k]][j+y[k]]-charPos]!=null && !visited.contains(new Coordinate(i + x[k], j + y[k], boggle[i+x[k]][j+y[k]])))
+				neighbours.add(new Coordinate(i + x[k], j + y[k], boggle[i+x[k]][j+y[k]]));
+		}
+		return neighbours;
+	}
+
+	public HashSet<String> solve() {
+		for (int i = 0; i < m; ++i)
+			for (int j = 0; j < n; ++j)
+				if (root.next[boggle[i][j] - charPos] != null)
+					recur(Character.toString(boggle[i][j]), root.next[boggle[i][j] - charPos], new Coordinate(i, j), new HashSet<>());
+		return words;
+	}
+
+	static class Node {
+		Character c;
+		Node[] next;
+
+		Node(Character c) {
+			this.c = c;
+			next = new Node[27];
+		}
+	}
+
+	static class Coordinate {
+		int x, y;
+		Character value;
+
+		public int hashCode() {
+			return x + y;
+		}
+
+		public boolean equals(Object obj) {
+			Coordinate c = (Coordinate) obj;
+			if (this.x == c.x && this.y == c.y)
+				return true;
+			else
+				return false;
+		}
+
+		Coordinate(int i, int j, Character value) {
+			x = i;
+			y = j;
+			this.value = value;
+		}
+
+		Coordinate(int i, int j) {
+			x = i;
+			y = j;
+		}
+
+		public String toString() {
+			return x + " " + y + " " + value;
+		}
+	}
+
+	public static Node prepareDictionary(Node root, HashSet<String> set) {
+		Iterator<String> i = set.iterator();
+		while (i.hasNext()) {
+			String word = i.next();
+			if(word.charAt(0)-96>0)
+			    charPos = 96;
+			else
+			    charPos = 64;
+			Node cur = root;
+			for (int j = 0; j < word.length(); ++j) {
+				int index = word.charAt(j) - charPos;
+				if (cur.next[index] == null)
+					cur.next[index] = new Node(word.charAt(j));
+				cur = cur.next[index];
+			}
+			cur.next[0] = new Node('0');
+		}
+		return root;
+	}
+
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		StringBuffer sb = new StringBuffer();
+		int t = sc.nextInt();
+		while (t-- > 0) {
+			int n = sc.nextInt(), m;
+			HashSet<String> set = new HashSet<>(n);
+			for (int i = 0; i < n; ++i){
+				set.add(sc.next());
+			}
+			Node root = prepareDictionary(new Node(Character.MIN_VALUE), set);
+			m = sc.nextInt();
+			n = sc.nextInt();
+			char[][] arr = new char[m][n];
+			for (int i = 0; i < m; ++i) {
+				for (int j = 0; j < n; ++j) {
+					arr[i][j] = sc.next().charAt(0);
+				}
+			}
+			GFG g = new GFG(root, arr, m, n);
+			HashSet<String> words = g.solve();
+			ArrayList<String> finalWords = new ArrayList<>(10);
+			finalWords.addAll(words);
+			Collections.sort(finalWords);
+			for(String word: finalWords) {
+				sb.append(word+" ");
+			}
+			if(finalWords.size()==0)
+			    sb.append("-1");
+			sb.append("\n");
+		}
+		sc.close();
+		System.out.println(sb);
+	}
+}
