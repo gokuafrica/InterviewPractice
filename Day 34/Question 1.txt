@@ -1,0 +1,71 @@
+// { Driver Code Starts
+import java.util.*;
+class GenIP {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int t = sc.nextInt();
+        while (t-- > 0) {
+            String s = sc.next();
+            Solution sln = new Solution();
+            ArrayList<String> str = sln.genIp(s);
+            Collections.sort(str);
+            for (String u : str) {
+                System.out.println(u);
+            }
+        }
+    }
+}// } Driver Code Ends
+
+
+/*complete the Function*/
+
+class Solution {
+    HashSet<String> ips;
+    
+    public boolean validSegment(String generated, String s, int index,int dot){
+        if(dot<=3)
+            if((index+4-dot)>s.length())
+                return false;
+        if(dot>4)
+            return false;
+        String oc = generated.substring(generated.lastIndexOf(".")+1,generated.length());
+        if(oc.charAt(0)=='0' && oc.length()>1)
+            return false;
+        try{
+            if(oc.length()==3 && Integer.parseInt(oc)>255)
+                return false;
+            return true;
+        }
+        catch(Exception e){
+            return false;
+        }
+    }
+    public void recur(int index,String s,String generated,int dot){
+        if(!validSegment(generated,s,index,dot)){
+            return;
+        }
+        if(index>=s.length()){
+            ips.add(generated);
+            return;
+        }
+        generated+=".";
+        recur(index+1,s,generated+s.substring(index,index+1),dot+1);
+        if(index+1<s.length())
+            recur(index+2,s,generated+s.substring(index,index+2),dot+1);
+        if(index+2<s.length())
+            recur(index+3,s,generated+s.substring(index,index+3),dot+1);
+    }
+    
+    public ArrayList<String> genIp(String s) {
+        ips = new HashSet<>();
+        if(s.length()>=1)
+            recur(1,s,s.substring(0,1),1);
+        if(s.length()>=2)
+            recur(2,s,s.substring(0,2),1);
+        if(s.length()>=3)
+            recur(3,s,s.substring(0,3),1);
+        ArrayList<String> resultSet = new ArrayList<>(ips.size());
+        resultSet.addAll(ips);
+        return resultSet;
+    }
+}

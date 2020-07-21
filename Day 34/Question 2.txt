@@ -1,0 +1,28 @@
+class Solution {
+    public HashMap<HashMap<Character,Integer>,List<String>> generateTrie(String[] strs){
+        HashMap<HashMap<Character,Integer>,List<String>> list = new HashMap<>();
+        for(String ele: strs){
+            HashMap<Character,Integer> h = new HashMap<>(26,1);
+            for(int i=0;i<ele.length();++i){
+                if(!h.containsKey(ele.charAt(i)))
+                    h.put(ele.charAt(i),0);
+                h.put(ele.charAt(i),h.get(ele.charAt(i))+1);
+            }
+            if(!list.containsKey(h)){
+                list.put(h,new LinkedList<>());
+            }
+            list.get(h).add(ele);
+        }
+        return list;
+    }
+    public List<List<String>> groupAnagrams(String[] strs) {
+        List<List<String>> resultSet = new LinkedList<>();
+        HashMap<HashMap<Character,Integer>,List<String>> map = generateTrie(strs);
+        Iterator<HashMap<Character,Integer>> i = map.keySet().iterator();
+        while(i.hasNext()){
+            HashMap<Character,Integer> h = i.next();
+            resultSet.add(map.get(h));
+        }
+        return resultSet;
+    }
+}
