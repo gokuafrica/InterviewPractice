@@ -1,0 +1,5 @@
+Question 1:
+https://practice.geeksforgeeks.org/problems/find-the-element-that-appears-once-in-sorted-array/0
+
+Question 2:
+https://practice.geeksforgeeks.org/problems/search-in-a-rotated-array/0
