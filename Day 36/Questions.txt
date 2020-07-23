@@ -1,0 +1,5 @@
+Question 1:
+https://practice.geeksforgeeks.org/problems/binary-search/1
+
+Question 2:
+https://practice.geeksforgeeks.org/problems/sum-of-middle-elements-of-two-sorted-arrays/0
