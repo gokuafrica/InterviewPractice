@@ -1,0 +1,8 @@
+Question 1:
+https://practice.geeksforgeeks.org/problems/quick-sort/1
+
+Question 2:
+https://practice.geeksforgeeks.org/problems/merge-sort/1
+
+Question 3:
+https://practice.geeksforgeeks.org/problems/k-th-element-of-two-sorted-array/0
