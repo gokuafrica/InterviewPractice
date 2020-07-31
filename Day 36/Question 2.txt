@@ -1,0 +1,85 @@
+/*Solved on day 44 rather than day 36*/
+
+import java.util.*;
+import java.lang.*;
+import java.io.*;
+
+class SumOfMiddleOfTwoSortedArrays {
+    
+    private static int solveForThree(int[] a, int[] b){
+        int[] min,max;
+        if(a.length==1){
+            min = a;
+            max = b;
+        }
+        else{
+            min = b;
+            max = a;
+        }
+        if(min[0]>max[0])
+            return min[0]+max[1];
+        else
+            return max[0]+max[1];
+    }
+    
+    private static int solve(int[] a, int[] b){
+        if(a.length==1){
+            return a[0]+b[0];
+        }
+        else if(a.length==2){
+            return (Math.max(a[0],b[0])+Math.min(a[1],b[1]));
+        }
+        while(a.length>2 && b.length>2){
+            int mid1,mid2;
+            if(a.length%2==0){
+                mid1 = a[a.length/2]+a[a.length/2-1];
+                mid2 = b[b.length/2]+b[b.length/2-1];
+                if(mid1==mid2 || a.length==2){
+                    return Math.max(a[a.length/2-1],b[b.length/2-1])+Math.min(a[a.length/2],b[b.length/2]);
+                }
+                else if(mid1>mid2){
+                    a = Arrays.copyOfRange(a,0,a.length/2+1);
+                    b = Arrays.copyOfRange(b,b.length/2-1,b.length);
+                }
+                else {
+                    a = Arrays.copyOfRange(a,a.length/2-1,a.length);
+                    b = Arrays.copyOfRange(b,0,b.length/2+1);
+                }
+            }
+            else{
+                mid1 = a[(a.length-1)/2];
+                mid2 = b[(b.length-1)/2];
+                if(mid1==mid2){
+                    return 2*mid1;
+                }
+                if(mid1>mid2){
+                    a = Arrays.copyOfRange(a,0,(a.length-1)/2+1);
+                    b = Arrays.copyOfRange(b,(b.length-1)/2,b.length);
+                }
+                else{
+                    a = Arrays.copyOfRange(a,(a.length-1)/2,a.length);
+                    b = Arrays.copyOfRange(b,0,(b.length-1)/2+1);
+                }
+            }
+            
+        }
+        
+        return (Math.max(a[0],b[0])+Math.min(a[1],b[1]));
+    }
+	public static void main (String[] args) {
+        Scanner sc = new Scanner(System.in);
+        StringBuffer sb = new StringBuffer();
+        int t = sc.nextInt();
+        while(t-->0){
+            int n = sc.nextInt();
+            int[] a = new int[n], b = new int[n];
+            for(int i =0;i<n;++i)
+                a[i]=sc.nextInt();
+            for(int i =0;i<n;++i)
+		        b[i]=sc.nextInt();
+            sb.append(solve(a,b)+"\n");
+        }
+        sc.close();
+        System.out.println(sb);
+	}
+}
