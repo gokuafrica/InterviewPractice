@@ -1,0 +1,50 @@
+//solved on day 49
+/*package whatever //do not write package name here */
+
+import java.util.Arrays;
+import java.util.Scanner;
+
+class KthElementOfTwoSortedArrays {
+    public static int solve(int[] a, int[] b, int k){
+        if(a.length==0)
+            return b[k-1];
+        if(b.length==0)
+            return a[k-1];
+        int mid1 = a.length/2;
+        int mid2 = b.length/2;
+        if(k<=mid1+mid2+1) {
+        	if(a[mid1]>b[mid2]){
+        		return solve(Arrays.copyOfRange(a,0,mid1),b,k);
+        	}
+        	else{
+        		return solve(a,Arrays.copyOfRange(b,0,mid2),k);
+        	}        	
+        }
+        else{
+            if(a[mid1]>b[mid2])
+                return solve(a,Arrays.copyOfRange(b,mid2+1,b.length),k-mid2-1);
+            else
+                return solve(Arrays.copyOfRange(a,mid1+1,a.length),b,k-mid1-1);
+        }
+    }
+	public static void main (String[] args) {
+		Scanner sc = new Scanner(System.in);
+		StringBuffer sb = new StringBuffer();
+		int t = sc.nextInt();
+		while(t-->0){
+		    int m = sc.nextInt();
+		    int n = sc.nextInt();
+		    int k = sc.nextInt();
+		    int[] a = new int[m],b = new int[n];
+		    for(int i=0;i<m;++i){
+		        a[i]=sc.nextInt();
+		    }
+		    for(int i=0;i<n;++i){
+		        b[i]=sc.nextInt();
+		    }
+		    sb.append(solve(a,b,k)+"\n");
+		}
+		sc.close();
+		System.out.println(sb);
+	}
+}
