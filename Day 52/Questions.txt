@@ -1,5 +1,5 @@
 Question 1:
-https://practice.geeksforgeeks.org/problems/find-optimum-operation/0
+https://practice.geeksforgeeks.org/problems/find-median-in-a-stream/0
 
 Question 2:
-https://practice.geeksforgeeks.org/problems/max-length-chain/1
+https://practice.geeksforgeeks.org/problems/heap-sort/1
