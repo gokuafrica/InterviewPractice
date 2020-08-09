@@ -1,0 +1,55 @@
+/*package whatever //do not write package name here */
+
+import java.util.*;
+import java.lang.*;
+import java.io.*;
+
+class GFG {
+    public static void main (String[] args) {
+    	Scanner sc = new Scanner(System.in);
+    	StringBuffer sb = new StringBuffer();
+    	int n = sc.nextInt();
+    	int[] a = new int[n];
+    	for(int i=0;i<n;++i)
+    	    a[i]=sc.nextInt();
+    	Queue<Integer> q1 = new PriorityQueue<>(Collections.reverseOrder());
+    	Queue<Integer> q2 = new PriorityQueue<>();
+    	int median = a[0];
+    	q1.add(a[0]);
+    	for(int i=1;i<n;++i){
+    	    int x = a[i];
+    	    sb.append(median+"\n");
+    	    if(q1.size()!=q2.size()){
+        	    if(q1.size()>q2.size()){
+        	        if(x>median)
+        	            q2.add(x);
+        	        else{
+        	            q2.add(q1.remove());
+        	            q1.add(x);
+        	        }
+        	    }
+        	    else{
+        	        if(x<median)
+        	            q1.add(x);
+        	        else{
+        	            q1.add(q2.remove());
+        	            q2.add(x);
+        	        }
+        	    }
+    	        median = (q1.peek()+q2.peek())/2;
+    	    }
+    	    else{
+    	        if(x>median){
+    	            q2.add(x);
+    	            median = q2.peek();
+    	        }
+    	        else{
+    	            q1.add(x);
+    	            median = q1.peek();
+    	        }
+    	    }
+    	}
+    	sb.append(median+"\n");
+    	System.out.println(sb);
+    }
+}
