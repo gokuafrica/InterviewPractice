@@ -1,0 +1,54 @@
+package heap;
+/*package whatever //do not write package name here */
+
+import java.util.*;
+import java.lang.*;
+import java.io.*;
+
+class RearrangeChars {
+    public static String solve(String s){
+        Map<String,Integer> m = new HashMap<>(26,1);
+        for(int i=0;i<s.length();++i){
+            if(!m.containsKey(s.substring(i,i+1)))
+                m.put(s.substring(i,i+1),0);
+            m.put(s.substring(i,i+1),m.get(s.substring(i,i+1))+1);
+        }
+        String last = s.substring(0,1);
+        int length = s.length();
+        for(int i=1;i<s.length();++i){
+            if(last.equals(s.substring(i,i+1))){
+                int remain = length-Optional.ofNullable(m.get(s.substring(i,i+1))).orElseGet(()->0);
+                if(remain==0)
+                    return "0";
+                Iterator<Map.Entry<String,Integer>> j = m.entrySet().iterator();
+                while(j.hasNext()) {
+                	Map.Entry<String,Integer> e = j.next();
+                    if(e.getKey().equals(s.substring(i,i+1))){
+                        continue;
+                    }
+                    else{
+                    	int x = m.get(e.getKey())-1;
+                    	e.setValue(x);
+                        if(m.get(e.getKey())==0)
+                            j.remove();
+                        break;
+                    }
+                }
+                --length;
+            }
+            last=s.substring(i,i+1);
+        }
+        return "1";
+    }
+	public static void main (String[] args) {
+		Scanner sc = new Scanner(System.in);
+		StringBuffer sb = new StringBuffer();
+		int t = sc.nextInt();
+		while(t-->0){
+		    String s = sc.next();
+		    sb.append(solve(s)+"\n");
+		}
+		System.out.println(sb);
+		sc.close();
+	}
+}
