@@ -1,0 +1,114 @@
+// { Driver Code Starts
+import java.util.*;
+
+class Node
+{
+    int data;
+    Node next;
+    
+    Node(int key)
+    {
+        data = key;
+        next = null;
+    }
+}
+
+
+class GfG
+{
+    public static void printList(Node node)
+    {
+        while(node != null)
+        {
+            System.out.print(node.data + " ");
+            node = node.next;
+        }
+    }
+    
+    public static void main (String[] args) {
+        Scanner sc = new Scanner(System.in);
+        
+        int t = sc.nextInt();
+        while(t-- > 0)
+        {   
+            int N = sc.nextInt();
+            
+            Node []a = new Node[N];
+            
+            for(int i = 0; i < N; i++)
+            {
+                int n = sc.nextInt();
+                
+                Node head = new Node(sc.nextInt());
+                Node tail = head;
+                
+                for(int j=0; j<n-1; j++)
+                {
+                    tail.next = new Node(sc.nextInt());
+                    tail = tail.next;
+                }
+                
+                a[i] = head;
+            }
+            
+            Merge g = new Merge();
+             
+            Node res = g.mergeKList(a,N);
+            if(res!=null)
+                printList(res);
+            System.out.println();
+        }
+    }
+}// } Driver Code Ends
+
+
+/*class Node
+{
+    int data;
+    Node next;
+    
+    Node(int key)
+    {
+        data = key;
+        next = null;
+    }
+}
+*/
+
+// a is an array of Nodes of the heads of linked lists
+// and N is size of array a
+
+class NodeComparator implements Comparator<Node>{
+    public int compare(Node a, Node b){
+        Integer i = new Integer(a.data);
+        return i.compareTo(b.data);
+    }
+}
+
+class Merge
+{
+    Node mergeKList(Node[]a,int N)
+    {
+        Node head = null;
+        Node rear = null;
+        Queue<Node> q = new PriorityQueue<>(new NodeComparator());
+        for(int i=0;i<N;++i){
+            q.add(a[i]);
+        }
+        while(!q.isEmpty()){
+            Node smallest = q.remove();
+            if(smallest.next!=null)
+                q.add(smallest.next);
+            if(head==null){
+                head = smallest;
+                rear = smallest;
+            }
+            else{
+                rear.next=smallest;
+                rear = smallest;
+            }
+            rear.next=null;
+        }
+        return head;
+    }
+}
